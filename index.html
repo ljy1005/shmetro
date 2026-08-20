@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>上海轨道交通票价机制优化 · 对比计算器 V1.2</title>
+<title>上海轨道交通票价机制优化 · 对比计算器 V1.4</title>
 <style>
   :root{
     --bg1:#0f172a; --bg2:#1e3a8a; --panel:#fff; --ink:#1e293b; --muted:#64748b;
@@ -35,6 +35,40 @@
   .tabs button{border:1px solid var(--line);background:#fff;padding:10px 18px;border-radius:20px;
     cursor:pointer;font-size:13px;color:var(--muted);min-height:42px;}
   .tabs button.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+  /* ===== 快捷搜站 ===== */
+  .searchwrap{margin-bottom:16px;}
+  .searchwrap .slabel{font-size:13px;color:var(--muted);margin-bottom:6px;display:block;}
+  .searchbox{position:relative;}
+  .searchbox input{
+    width:100%;padding:12px 44px 12px 12px;border:1px solid var(--line);border-radius:10px;
+    font-size:16px;background:#fff;color:var(--ink);outline:none;
+  }
+  .searchbox input:focus{border-color:var(--blue);}
+  .clearbtn{
+    position:absolute;right:8px;top:50%;transform:translateY(-50%);
+    border:none;background:var(--soft);width:28px;height:28px;border-radius:50%;
+    cursor:pointer;color:var(--muted);font-size:16px;line-height:1;
+  }
+  .searchres{
+    margin-top:8px;border:1px solid var(--line);border-radius:10px;
+    max-height:280px;overflow-y:auto;background:#fff;
+    -webkit-overflow-scrolling:touch;
+  }
+  .srow{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  .srow:last-child{border-bottom:none;}
+  .sname{font-weight:600;font-size:14px;}
+  .sname b{color:var(--blue);}
+  .spy{font-size:10px;color:var(--muted);letter-spacing:1px;background:var(--soft);
+    padding:2px 6px;border-radius:6px;white-space:nowrap;}
+  .slines{display:flex;gap:4px;flex-wrap:wrap;}
+  .sline{font-size:11px;color:#fff;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+  .sbtns{margin-left:auto;display:flex;gap:6px;}
+  .sbtns button{font-size:12px;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer;min-height:30px;}
+  .sbtns button.a{color:var(--red);border-color:#fecaca;}
+  .sbtns button.b{color:var(--green);border-color:#bbf7d0;}
+  .sempty{padding:14px;text-align:center;font-size:13px;color:var(--muted);}
+
   .pickers{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:end;}
   .pcol label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
   .pcol .dotA{color:var(--red);} .pcol .dotB{color:var(--green);}
@@ -107,28 +141,32 @@
     .examples button{font-size:11px;padding:7px 9px;} .note{font-size:11px;}
     .pcard .pval{font-size:26px;} .go{letter-spacing:1px;font-size:15px;}
     input[type=number]{max-width:none;}
+    .sbtns{margin-left:0;width:100%;}
+    .sbtns button{flex:1;}
   }
   @media(max-width:380px){header h1{font-size:16px;} .card{padding:12px 10px;} .pcard .pval{font-size:24px;}}
 </style>
 </head>
 <body>
 <header>
-  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.2</span></h1>
+  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.4</span></h1>
   <p>依据《优化上海市轨道交通票价机制听证方案》附件1：现行 / 方案一 / 方案二</p>
 </header>
 
 <div class="wrap">
 
-  <!-- V1.2 更新说明 -->
+  <!-- 更新说明 -->
   <div class="card">
-    <details open>
-      <summary>📌 V1.2 更新说明</summary>
+    <details>
+      <summary>📌 版本更新说明（V1.4）</summary>
       <div class="changelog" style="margin-top:8px;">
         <b>① 数据升级</b>：采用全网站点及真实站间累计里程，票价按实际里程计算。<br>
         <b>② 站名/顺序修正</b>：1号线「中山北路」、9号线「上海松江站」「松江大学城」「肇嘉浜路」、4号线「向城路」、11号线「陈翔公路」等。<br>
         <b>③ 新增开通站点</b>：2号线「蟠祥路·国家会计学院」「国家会展中心」「浦东南路」「浦东1号2号航站楼」、17号线「西岑」、6号线「源深体育中心」、18号线二期等。<br>
         <b>④ 换乘命名统一</b>：一大会址·黄陂南路、一大会址·新天地等。<br>
-        <b>⑤ V1.2 新增</b>：补充 5号线闵行开发区支线（东川路→金平路→华宁路→文井路→闵行开发区）。<br>
+        <b>⑤ V1.2</b>：补充 5号线闵行开发区支线。<br>
+        <b>⑥ V1.3</b>：快捷搜站（站名模糊匹配 + 线路色标 + 一键设为起终点）。<br>
+        <b>⑦ V1.4 新增</b>：拼音首字母检索（如 xjh=徐家汇、rmgc=人民广场、hq2=虹桥2号航站楼），候选结果展示拼音码；修正18号线「沈测路」笔误为「沈梅路」。<br>
         <span style="color:var(--muted)">备注：4号线环线闭合段按约1km估算；14号线龙居路（暂未启用）、18号线江杨南路（暂未开通）按数据源保留。</span>
       </div>
     </details>
@@ -141,6 +179,18 @@
     </div>
 
     <div id="panelStation">
+
+      <!-- 快捷搜站 -->
+      <div class="searchwrap">
+        <span class="slabel">🔍 快捷搜站（支持站名 / 拼音首字母，如「行知路」或「xzl」）</span>
+        <div class="searchbox">
+          <input type="text" id="searchInput" placeholder="站名或拼音首字母：xjh=徐家汇 rmgc=人民广场" autocomplete="off"
+                 oninput="onSearch()" onfocus="onSearchFocus()">
+          <button class="clearbtn" onclick="clearSearch()" title="清空">×</button>
+        </div>
+        <div id="searchResults" class="searchres hidden"></div>
+      </div>
+
       <div class="pickers">
         <div class="pcol">
           <label><b class="dotA">●</b> 起点</label>
@@ -165,7 +215,7 @@
       </div>
 
       <div class="note">
-        已采用全网站点真实累计里程（含 5号线闵行开发区支线），票价按实际站间里程计算。如需对照附件1的某一具体乘距，可切换到「按里程精确输入」。
+        已采用全网站点真实累计里程（含 5号线闵行开发区支线），票价按实际站间里程计算。搜索支持中文站名与拼音首字母；如需对照附件1的某一具体乘距，可切换到「按里程精确输入」。
       </div>
     </div>
 
@@ -241,7 +291,15 @@ const SEGMENTS=[
  {line:'浦江线',stations:[['沈杜公路',0],['三鲁公路',1972],['闵瑞路',2985],['浦航路',3761],['东城一路',4942],['汇臻路',6294]]}
 ];
 
-/* ---- 建图：边权重 = 相邻站累计里程差（米） ---- */
+/* ---- 线路色标 ---- */
+const LINE_COLORS={
+ '1号线':'#E4002B','2号线':'#8FC31F','3号线':'#FFD100','4号线':'#5F259F',
+ '5号线':'#B41E91','6号线':'#C6168D','7号线':'#F37021','8号线':'#00A3E0','9号线':'#71C5E8',
+ '10号线':'#BFA8D8','11号线':'#A32035','12号线':'#007A60','13号线':'#E91195','14号线':'#727D13',
+ '15号线':'#D6A461','16号线':'#2BB673','17号线':'#C28840','18号线':'#8C6A45','浦江线':'#8A9BA8'
+};
+
+/* ---- 建图 ---- */
 const adj={};
 SEGMENTS.forEach(seg=>{
   const sts=seg.stations;
@@ -292,6 +350,27 @@ function findRange(d){
     if(d>=lo&&d<=hi)return r[0];
   }
   return '—';
+}
+
+/* ================= 拼音首字母 ================= */
+const PY_OVERRIDE={'长':'c','行':'x','乐':'l','陂':'p','重':'c'};
+const PY_BOUNDS=[['a','阿'],['b','八'],['c','擦'],['d','搭'],['e','蛾'],['f','发'],['g','噶'],['h','哈'],
+['j','击'],['k','喀'],['l','垃'],['m','妈'],['n','拿'],['o','哦'],['p','啪'],['q','期'],
+['r','然'],['s','撒'],['t','塌'],['w','挖'],['x','昔'],['y','压'],['z','匝']];
+function charInitial(ch){
+  if(PY_OVERRIDE[ch]) return PY_OVERRIDE[ch];
+  for(let i=PY_BOUNDS.length-1;i>=0;i--){
+    if(ch.localeCompare(PY_BOUNDS[i][1],'zh-CN')>=0) return PY_BOUNDS[i][0];
+  }
+  return '';
+}
+function buildPyKey(name){
+  let s='';
+  for(const ch of name){
+    if(/[a-zA-Z0-9]/.test(ch)) s+=ch.toLowerCase();
+    else if(/[\u4e00-\u9fa5]/.test(ch)) s+=charInitial(ch);
+  }
+  return s;
 }
 
 /* ================= UI ================= */
@@ -345,6 +424,82 @@ function swap(){
 }
 function loadOD(a,b){setStation('A',a);setStation('B',b);compute();}
 
+/* ================= 快捷搜站（站名 + 拼音首字母） ================= */
+let stationIndex=null, pyMap=null;
+function buildStationIndex(){
+  const map=new Map();
+  SEGMENTS.forEach(seg=>{
+    seg.stations.forEach(st=>{
+      const name=st[0];
+      if(!map.has(name)) map.set(name,new Set());
+      map.get(name).add(seg.line);
+    });
+  });
+  return map;
+}
+const HOT=['人民广场','徐家汇','世纪大道','虹桥火车站','龙阳路','陆家嘴','上海火车站','莘庄','迪士尼','行知路'];
+function renderResults(list,q){
+  const box=document.getElementById('searchResults');
+  if(!list.length){
+    box.innerHTML='<div class="sempty">未找到匹配站点，换个关键字或拼音首字母试试（如 xzl=行知路）</div>';
+    box.classList.remove('hidden');
+    return;
+  }
+  box.innerHTML=list.map(([name,lines])=>{
+    const disp=(q&&/[\u4e00-\u9fa5]/.test(q))?name.split(q).join('<b>'+q+'</b>'):name;
+    const badges=[...lines].map(l=>`<span class="sline" style="background:${LINE_COLORS[l]||'#64748b'}">${l}</span>`).join('');
+    const py=(pyMap.get(name)||'').toUpperCase();
+    return `<div class="srow">
+      <span class="sname">${disp}</span>
+      <span class="spy">${py}</span>
+      <span class="slines">${badges}</span>
+      <span class="sbtns">
+        <button class="a" onclick="pickStation('A','${name}')">设为起点</button>
+        <button class="b" onclick="pickStation('B','${name}')">设为终点</button>
+      </span>
+    </div>`;
+  }).join('');
+  box.classList.remove('hidden');
+}
+function onSearch(){
+  const qRaw=document.getElementById('searchInput').value.trim();
+  if(!qRaw){renderHot();return;}
+  const q=qRaw.toLowerCase();
+  const list=[];
+  for(const [name,lines] of stationIndex){
+    let rank=-1;
+    const ni=name.toLowerCase().indexOf(q);
+    if(ni===0) rank=0;
+    else if(ni>0) rank=1;
+    else{
+      const py=pyMap.get(name)||'';
+      const pi=py.indexOf(q);
+      if(pi===0) rank=2;
+      else if(pi>0) rank=3;
+    }
+    if(rank>=0) list.push([name,lines,rank,name.length]);
+  }
+  list.sort((x,y)=>(x[2]-y[2])||(x[3]-y[3]));
+  renderResults(list.slice(0,30).map(r=>[r[0],r[1]]),qRaw);
+}
+function renderHot(){
+  renderResults(HOT.filter(n=>stationIndex.has(n)).map(n=>[n,stationIndex.get(n)]),'');
+}
+function onSearchFocus(){
+  const q=document.getElementById('searchInput').value.trim();
+  if(!q) renderHot();
+}
+function clearSearch(){
+  document.getElementById('searchInput').value='';
+  document.getElementById('searchResults').classList.add('hidden');
+}
+function pickStation(w,name){
+  setStation(w,name);
+  compute();
+  clearSearch();
+}
+
+/* ================= 计算与渲染 ================= */
 function compute(){
   const a=document.getElementById('stnA').value,b=document.getElementById('stnB').value;
   if(!a||!b)return;
@@ -436,6 +591,9 @@ function renderFareTable(){
 }
 
 /* ---- 初始化 ---- */
+stationIndex=buildStationIndex();
+pyMap=new Map();
+for(const name of stationIndex.keys()) pyMap.set(name,buildPyKey(name));
 fillLineOptions();
 document.getElementById('lineA').value='1号线';
 document.getElementById('lineB').value='2号线';
