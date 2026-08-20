@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>上海轨道交通票价机制优化 · 对比计算器 V1.6</title>
+<title>上海轨道交通票价机制优化 · 对比计算器 V1.7</title>
 <style>
   :root{
     --bg1:#0f172a; --bg2:#1e3a8a; --panel:#fff; --ink:#1e293b; --muted:#64748b;
@@ -124,6 +124,9 @@
   .go:hover{opacity:.92;}
   input[type=number]{max-width:320px;}
   .mini{font-size:11px;color:var(--muted);font-weight:normal;margin-top:3px;line-height:1.5;}
+  /* 满额优惠输入区 */
+  .manewrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:13px;color:var(--ink);}
+  .manewrap input{width:100px;max-width:100px;padding:8px 10px;font-size:15px;margin:0;}
   @media(max-width:820px){.cards3{grid-template-columns:1fr;}}
   @media(max-width:720px){
     header{padding:22px 14px 12px;} header h1{font-size:19px;} header p{font-size:12px;}
@@ -141,6 +144,7 @@
     .examples button{font-size:11px;padding:7px 9px;} .note{font-size:11px;}
     .pcard .pval{font-size:26px;} .go{letter-spacing:1px;font-size:15px;}
     input[type=number]{max-width:none;}
+    .manewrap input{max-width:100px;}
     .sbtns{margin-left:0;width:100%;}
     .sbtns button{flex:1;}
   }
@@ -149,7 +153,7 @@
 </head>
 <body>
 <header>
-  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.6</span></h1>
+  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.7</span></h1>
   <p>依据《优化上海市轨道交通票价机制听证方案》附件1：现行 / 方案一 / 方案二</p>
 </header>
 
@@ -158,7 +162,7 @@
   <!-- 更新说明 -->
   <div class="card">
     <details>
-      <summary>📌 版本更新说明（V1.6）</summary>
+      <summary>📌 版本更新说明（V1.7）</summary>
       <div class="changelog" style="margin-top:8px;">
         <b>① 数据升级</b>：采用全网站点及真实站间累计里程，票价按实际里程计算。<br>
         <b>② 站名/顺序修正</b>：1号线「中山北路」、9号线「上海松江站」「松江大学城」「肇嘉浜路」、11号线「陈翔公路」等。<br>
@@ -167,8 +171,9 @@
         <b>⑤ V1.2</b>：补充 5号线闵行开发区支线。<br>
         <b>⑥ V1.3</b>：快捷搜站（站名模糊匹配 + 线路色标 + 一键设为起终点）。<br>
         <b>⑦ V1.4</b>：拼音首字母检索（如 xjh=徐家汇、rmgc=人民广场）；修正18号线「沈测路」为「沈梅路」。<br>
-        <b>⑧ V1.5</b>：4号线环线更新为精确数据——闭合段（上海体育馆→宜山路）由估算约1km改为精确值 <b>1144米</b>，环线全长 33.747 公里。<br>
-        <b>⑨ V1.6</b>：4号线 21256m 处站名恢复为「向城路」（「浦电路」为旧名；4号线向城路与6号线浦电路为两个独立车站）。<br>
+        <b>⑧ V1.5</b>：4号线环线闭合段（上海体育馆→宜山路）更新为精确值 1144米，环线全长 33.747 公里。<br>
+        <b>⑨ V1.6</b>：4号线 21256m 处站名恢复为「向城路」（与6号线浦电路为独立车站）。<br>
+        <b>⑩ V1.7 新增</b>：满额优惠测算——按"同一支付渠道每月票款累计满100元后部分享9折"计算实际单次成本与月总支出，并与计次票对比给出更省方案（两种优惠不可叠加）。<br>
         <span style="color:var(--muted)">备注：14号线龙居路（暂未启用）、18号线江杨南路（暂未开通）按数据源保留。</span>
       </div>
     </details>
@@ -501,6 +506,76 @@ function pickStation(w,name){
   clearSearch();
 }
 
+/* ================= 满额优惠测算 ================= */
+let lastCalc=null, manRides=60;
+function maneCost(f,n){
+  if(f<=0||n<=0) return {total:0,avg:0,discRides:0,fullRides:0};
+  const full=Math.min(n, Math.ceil(100/f));
+  const disc=n-full;
+  const total=full*f+disc*f*0.9;
+  return {total, avg:total/n, discRides:disc, fullRides:full};
+}
+function bestPassForN(n){
+  const P=[[45,210],[60,270],[90,390]];
+  let best=null;
+  for(const [r,p] of P){
+    const k=Math.ceil(n/r);
+    const cost=k*p/n;
+    if(!best||cost<best.cost) best={r,p,k,cost};
+  }
+  return best;
+}
+function updateMane(){
+  const v=parseFloat(document.getElementById('monthRides').value);
+  manRides=(v>0)?v:0;
+  renderMane();
+}
+function renderMane(){
+  const box=document.getElementById('maneBox');
+  if(!box)return;
+  if(!lastCalc||!(manRides>0)){
+    box.innerHTML='<p class="passhint">请输入每月乘坐次数后查看测算。</p>';
+    return;
+  }
+  const n=manRides;
+  const rows=[['现行',lastCalc.f0],['方案一',lastCalc.f1],['方案二',lastCalc.f2]].map(([label,f])=>{
+    const m=maneCost(f,n);
+    const bp=bestPassForN(n);
+    const maneBetter=m.avg<=bp.cost;
+    const better=maneBetter
+      ?'<span class="same">满额优惠更省</span>'
+      :`<span class="up">计次票更省</span>`;
+    const ticket=`${bp.k}×${bp.r}次票（${bp.k*bp.p}元）`;
+    const save=maneBetter
+      ?`较计次票每次省 ${fmt(bp.cost-m.avg)} 元`
+      :`较满额优惠每次省 ${fmt(m.avg-bp.cost)} 元`;
+    return `<tr>
+      <td>${label}</td>
+      <td>${f} 元</td>
+      <td>${fmt(m.avg)} 元</td>
+      <td>${fmt(m.total)} 元</td>
+      <td>${ticket}</td>
+      <td>${fmt(bp.cost)} 元</td>
+      <td>${better}<div class="mini">${save}</div></td>
+    </tr>`;
+  }).join('');
+  const m1=maneCost(lastCalc.f1,n);
+  box.innerHTML=`
+    <div class="table-scroll">
+      <table>
+        <tr>
+          <th>方案</th><th>单次票价</th><th>满额优惠<br>实际单次成本</th><th>月总支出</th>
+          <th>计次票方案<br>（最少张数覆盖）</th><th>计次票<br>单次成本</th><th>更省方案</th>
+        </tr>
+        ${rows}
+      </table>
+    </div>
+    <p class="passhint">
+      满额优惠口径：同一支付渠道刷卡/扫码，每月票款累计满 100 元后，后续乘车享 9 折；以方案一为例，本月前 ${m1.fullRides} 次全价（累计达到/超过100元），之后 ${m1.discRides} 次享 9 折。<br>
+      注意：满额优惠与计次票不可叠加，二者择一；计次票按能覆盖当月乘车次数的最少张数估算，未用满次数时实际单次成本会更高。
+    </p>`;
+}
+
 /* ================= 计算与渲染 ================= */
 function compute(){
   const a=document.getElementById('stnA').value,b=document.getElementById('stnB').value;
@@ -526,6 +601,7 @@ function render(d,title,tag){
   const f0=fareCurrent(d), f1=fareP1(d), f2=fareP2(d);
   const max=Math.max(f0,f1,f2,1);
   const u=d>0?[f0/d,f1/d,f2/d]:[0,0,0];
+  lastCalc={f0,f1,f2};
 
   const passes=[
     {name:'45次票（210元）', cost:210/45, rides:45},
@@ -578,7 +654,15 @@ function render(d,title,tag){
         <tr><th>计次票</th><th>单次成本（用满）</th><th>较方案一（${f1} 元/次）</th><th>较方案二（${f2} 元/次）</th></tr>
         ${passHtml}
       </table>
-    </div>`;
+    </div>
+    <h2 style="margin-top:16px;font-size:14px">满额优惠测算 <span class="tag">月累计满100元后部分9折 · 不与计次票叠加</span></h2>
+    <div class="manewrap">
+      <label for="monthRides">每月乘坐次数：</label>
+      <input type="number" id="monthRides" min="1" step="1" value="${manRides}" inputmode="numeric" oninput="updateMane()">
+      <span style="color:var(--muted);font-size:12px;">次（如每日往返通勤约 44 次/月）</span>
+    </div>
+    <div id="maneBox"></div>`;
+  renderMane();
 }
 
 function renderFareTable(){
