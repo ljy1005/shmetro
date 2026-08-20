@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>上海轨道交通票价机制优化 · 对比计算器 V1.14</title>
+<title>上海轨道交通票价机制优化 · 对比计算器 V1.15</title>
 <style>
   :root{--bg1:#0f172a;--bg2:#1e3a8a;--panel:#fff;--ink:#1e293b;--muted:#64748b;--blue:#1d4ed8;--amber:#d97706;--green:#059669;--red:#dc2626;--soft:#f1f5f9;--line:#e2e8f0;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -59,6 +59,10 @@
   .calib{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 6px;font-size:13px;color:var(--ink);background:var(--soft);padding:10px 12px;border-radius:10px;}
   .calib input[type=number]{width:70px;max-width:70px;padding:6px 8px;font-size:14px;margin:0 4px;text-align:center;}
   .calib label{display:flex;align-items:center;gap:4px;white-space:nowrap;}
+  .stepbtn{width:36px;height:36px;border:1px solid var(--line);background:#fff;border-radius:8px;
+    font-size:20px;line-height:1;cursor:pointer;color:var(--blue);padding:0;flex-shrink:0;
+    touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+  .stepbtn:active{background:var(--blue);color:#fff;}
   .calib-hint{color:var(--red);font-weight:600;font-size:13px;margin:0 0 12px;background:#fef2f2;padding:8px 12px;border-radius:6px;border:1px dashed var(--red);line-height:1.5;}
   .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
   .pcard{border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;}
@@ -126,17 +130,16 @@
 </head>
 <body>
 <header>
-  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.14</span></h1>
+  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.15</span></h1>
   <p>依据《优化上海市轨道交通票价机制听证方案》附件1：现行 / 方案一 / 方案二</p>
 </header>
 <div class="wrap">
   <div class="card">
     <details>
-      <summary>📌 版本更新说明（V1.14）</summary>
+      <summary>📌 版本更新说明（V1.15）</summary>
       <div class="changelog" style="margin-top:8px;">
-        <b>①-⑮</b>：见前版（全网真实里程、支线/环线精确数据、搜站/拼音/标注、满额优惠、路径明细与公式代入、移动端卡片化等）。<br>
-        <b>⑯ V1.13</b>：精简校准选项，移除换乘接走；增加醒目提示引导用户调整全网里程系数。<br>
-        <b>⑰ V1.14</b>：移除「官方运营里程 vs 现有站间距累加对比」表格，页面更简洁。<br>
+        <b>①-⑰</b>：见前版（全网真实里程、支线/环线精确数据、搜站/拼音/标注、满额优惠、路径明细与公式代入、移动端卡片化、里程系数校准等）。<br>
+        <b>⑱ V1.15</b>：全网里程系数增加 −/＋ 快捷调节按钮（步进0.5%），手机端无需键盘即可点按调节；手动输入仍保留（精确到0.1%）。<br>
       </div>
     </details>
   </div>
@@ -171,7 +174,7 @@
         <button onclick="loadOD('虹桥火车站','迪士尼')">虹桥火车站→迪士尼</button>
         <button onclick="loadOD('莘庄','闵行开发区')">莘庄→闵行开发区</button>
       </div>
-      <div class="note">结果区含「最短路径明细」「计价公式代入」。若与官方App不一致，请调整下方「全网里程系数」（推荐 102.5%）。</div>
+      <div class="note">结果区含「最短路径明细」「计价公式代入」。若与官方App不一致，请用 −/＋ 按钮或手动调整「全网里程系数」（推荐 102% ~ 103%）。</div>
     </div>
     <div id="panelDist" class="hidden">
       <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:8px;">输入乘车里程（公里），如全市平均乘距 16.45</label>
@@ -274,7 +277,8 @@ function maneCost(f,n){if(f<=0||n<=0)return{total:0,avg:0,discRides:0,fullRides:
 function bestPassForN(n){const P=[[45,210],[60,270],[90,390]];let best=null;
  for(const[r,p]of P){const k=Math.ceil(n/r),cost=k*p/n;if(!best||cost<best.cost)best={r,p,k,cost};}return best;}
 function updateMane(){const v=parseFloat(document.getElementById('monthRides').value);manRides=(v>0)?v:0;renderMane();}
-function updateCalib(){calib.factor=Math.max(10,parseFloat(document.getElementById('calibFactor').value)||100);if(lastRaw)render(lastRaw.d,lastRaw.title,lastRaw.tag,lastRaw.edges);}
+function updateCalib(){calib.factor=Math.max(50,Math.min(200,parseFloat(document.getElementById('calibFactor').value)||100));if(lastRaw)render(lastRaw.d,lastRaw.title,lastRaw.tag,lastRaw.edges);}
+function stepFactor(d){calib.factor=Math.max(50,Math.min(200,Math.round((calib.factor+d)*10)/10));if(lastRaw)render(lastRaw.d,lastRaw.title,lastRaw.tag,lastRaw.edges);}
 function renderMane(){const box=document.getElementById('maneBox');if(!box)return;
  if(!lastCalc||!(manRides>0)){box.innerHTML='<p class="passhint">请输入每月乘坐次数后查看测算。</p>';return;}
  const n=manRides;
@@ -317,9 +321,14 @@ function render(d,title,tag,edges){
  document.getElementById('resBody').innerHTML=`
   <div class="route"><span class="od">${title}</span><span class="dist">乘车里程 ${fmt(d)} 公里</span><span class="range">所属乘距档：${findRange(dAdj)} 公里</span></div>
   <div class="calib">⚙️ 计费口径校准：
-   <label>全网里程系数 <input type="number" id="calibFactor" min="50" step="0.1" value="${calib.factor}" onchange="updateCalib()"> %</label>
+   <label>全网里程系数
+    <button type="button" class="stepbtn" onclick="stepFactor(-0.5)" aria-label="减少0.5">−</button>
+    <input type="number" id="calibFactor" min="50" max="200" step="0.1" value="${calib.factor}" onchange="updateCalib()">
+    <button type="button" class="stepbtn" onclick="stepFactor(0.5)" aria-label="增加0.5">＋</button>
+    %
+   </label>
   </div>
-  <div class="calib-hint">💡 如现有票价计算与实际情况不符，请手动调整上方全网里程系数（推荐 102% ~ 103%）以对齐官方App。</div>
+  <div class="calib-hint">💡 如现有票价计算与实际情况不符，请用 −/＋ 按钮或手动调整上方全网里程系数（推荐 102% ~ 103%）以对齐官方App。</div>
   <div class="cards3">
    <div class="pcard cur"><div class="pname">现行票价</div><div class="pval">${f0} 元</div><div class="psub" style="color:#64748b">基准</div></div>
    <div class="pcard p1"><div class="pname">方案一</div><div class="pval">${f1} 元</div><div class="psub ${f1-f0?'up':'same'}">${f1-f0?'较现行 +'+fmt(f1-f0)+' 元':'持平'}</div></div>
