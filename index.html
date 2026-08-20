@@ -49,7 +49,8 @@
   .examples{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
   .examples span{font-size:12px;color:var(--muted);}
   .examples button{font-size:12px;border:1px dashed var(--line);background:#fff;padding:8px 10px;border-radius:14px;cursor:pointer;color:var(--ink);min-height:34px;}
-  .note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.7;background:var(--soft);padding:10px 12px;border-radius:10px;word-break:break-word;}
+  .note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.9;background:var(--soft);padding:10px 12px;border-radius:10px;word-break:break-word;}
+  .note mark.hl{background:#fde047;color:#7c2d12;font-weight:600;padding:2px 6px;border-radius:4px;}
   .changelog{font-size:12px;color:var(--ink);line-height:1.9;}
   .changelog b{color:var(--blue);}
   .route{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;}
@@ -175,7 +176,7 @@
         <button onclick="loadOD('虹桥火车站','迪士尼')">虹桥火车站→迪士尼</button>
         <button onclick="loadOD('莘庄','闵行开发区')">莘庄→闵行开发区</button>
       </div>
-      <div class="note">结果区含「最短路径明细」「计价公式代入」。若与官方App不一致，请用 −/＋ 按钮或手动调整「全网里程系数」（默认 101.5%）。</div>
+      <div class="note">结果区含「最短路径明细」「计价公式代入」。若与官方App不一致，请用 −/＋ 按钮或手动调整「全网里程系数」（默认 101.5%）。<br><mark class="hl">经官方票价数据和实际站点长度比对核查，官方票价的计算方式并未完全按照公布的6/16/26/36等跨区段范围来计价，比如2号线远东大道-浦东1号2号航站楼，官方票价为3元，实际长度8.21公里（百度地图查询长度8.5公里），落在票价4元范围内，类似此类票价不一致情况请悉知。</mark></div>
     </div>
     <div id="panelDist" class="hidden">
       <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:8px;">输入乘车里程（公里），如全市平均乘距 16.45</label>
@@ -194,7 +195,7 @@
     </details>
   </div>
 </div>
-<footer>说明：① 票价严格按附件1口径；② 适用范围为全市轨道交通（不含磁浮线、金山铁路、市域机场线及以后开通的市域线）；③ 里程为数据源站间距累加，官方计费口径含车站体等附加空间，可用校准系数模拟；④ 公交换乘优惠：120分钟内换乘减1元，可与满额优惠叠加。</footer>
+<footer>说明：① 票价严格按附件1口径；② 适用范围为全市轨道交通（不含磁浮线、金山铁路、市域机场线及以后开通的市域线）；③ 里程为数据源站间距累加，官方计费口径含车站体等附加空间，可用校准系数模拟；④ 公交换乘优惠：120分钟内换乘减1元，可与满额优惠叠加；⑤ 官方票价与公布区段表可能存在个别不一致，详见选站页高亮提示。</footer>
 <script>
 function fareCurrent(d){ if(d<=0)return 0; if(d<=6)return 3; return 3+Math.ceil((d-6)/10); }
 function fareP1(d){ if(d<=0)return 0; const s=[4,4,4,7,7,7,10,10,10]; let x=4,p=3; if(d<=x)return p; for(const k of s){x+=k;p++;if(d<=x)return p;} return p+Math.ceil((d-67)/15); }
