@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>上海轨道交通票价机制优化 · 对比计算器 V1.8</title>
+<title>上海轨道交通票价机制优化 · 对比计算器 V1.9</title>
 <style>
   :root{
     --bg1:#0f172a; --bg2:#1e3a8a; --panel:#fff; --ink:#1e293b; --muted:#64748b;
@@ -128,7 +128,7 @@
   .manewrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:13px;color:var(--ink);}
   .manewrap input{width:100px;max-width:100px;padding:8px 10px;font-size:15px;margin:0;}
 
-  /* ===== 手机端：宽表转卡片，消除横向滚动 ===== */
+  /* ===== 手机端：宽表转卡片，消除横向滚动；表头隐藏，标签统一在左 ===== */
   @media(max-width:720px){
     table.m-cards{min-width:0;}
     table.m-cards thead{display:none;}
@@ -170,7 +170,7 @@
 </head>
 <body>
 <header>
-  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.8</span></h1>
+  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.9</span></h1>
   <p>依据《优化上海市轨道交通票价机制听证方案》附件1：现行 / 方案一 / 方案二</p>
 </header>
 
@@ -179,7 +179,7 @@
   <!-- 更新说明 -->
   <div class="card">
     <details>
-      <summary>📌 版本更新说明（V1.8）</summary>
+      <summary>📌 版本更新说明（V1.9）</summary>
       <div class="changelog" style="margin-top:8px;">
         <b>① 数据升级</b>：采用全网站点及真实站间累计里程，票价按实际里程计算。<br>
         <b>② 站名/顺序修正</b>：1号线「中山北路」、9号线「上海松江站」「松江大学城」「肇嘉浜路」、11号线「陈翔公路」等。<br>
@@ -191,7 +191,8 @@
         <b>⑧ V1.5</b>：4号线环线闭合段更新为精确值 1144米，环线全长 33.747 公里。<br>
         <b>⑨ V1.6</b>：4号线 21256m 处站名恢复为「向城路」。<br>
         <b>⑩ V1.7</b>：满额优惠测算（月累计满100元后部分9折，与计次票对比）。<br>
-        <b>⑪ V1.8</b>：手机端宽表（计次票/满额优惠/票价对比）自动转为卡片布局，消除横向滚动条；暂未启用/暂未开通站点在名称中以（）标注：龙居路（暂未启用）、江杨南路（暂未开通）。<br>
+        <b>⑪ V1.8</b>：手机端宽表转卡片布局；未启用/未开通站点加（）标注。<br>
+        <b>⑫ V1.9</b>：修复手机端卡片化时表头仍横向显示的问题——表头统一纳入 thead 并在小屏隐藏，卡片内信息全部"左标签、右数值"对齐，更美观。<br>
       </div>
     </details>
   </div>
@@ -580,11 +581,11 @@ function renderMane(){
   box.innerHTML=`
     <div class="table-scroll">
       <table class="m-cards">
-        <tr>
+        <thead><tr>
           <th>方案</th><th>单次票价</th><th>满额优惠<br>实际单次成本</th><th>月总支出</th>
           <th>计次票方案<br>（最少张数覆盖）</th><th>计次票<br>单次成本</th><th>更省方案</th>
-        </tr>
-        ${rows}
+        </tr></thead>
+        <tbody>${rows}</tbody>
       </table>
     </div>
     <p class="passhint">
@@ -658,18 +659,20 @@ function render(d,title,tag){
     </div>
     <div class="table-scroll">
       <table class="m-cards">
-        <tr><th style="width:28%">项目</th><th>现行</th><th>方案一</th><th>方案二</th></tr>
+        <thead><tr><th style="width:28%">项目</th><th>现行</th><th>方案一</th><th>方案二</th></tr></thead>
+        <tbody>
         <tr><td>票价（元）</td><td data-label="现行">${f0}</td><td data-label="方案一">${f1}</td><td data-label="方案二">${f2}</td></tr>
         <tr><td>较现行变化</td><td data-label="现行">—</td><td data-label="方案一">${f1-f0?'<span class="up">+'+fmt(f1-f0)+'（+'+fmt((f1-f0)/f0*100)+'%）</span>':'持平'}</td><td data-label="方案二">${f2-f0?'<span class="up">+'+fmt(f2-f0)+'（+'+fmt((f2-f0)/f0*100)+'%）</span>':'持平'}</td></tr>
         <tr><td>每人公里单价（元/km）</td><td data-label="现行">${u[0].toFixed(3)}</td><td data-label="方案一">${u[1].toFixed(3)}</td><td data-label="方案二">${u[2].toFixed(3)}</td></tr>
+        </tbody>
       </table>
     </div>
     <h2 style="margin-top:16px;font-size:14px">计次票参考 <span class="tag">按新方案票价对比</span></h2>
     <p class="passhint">本次行程现行票价 ${f0} 元；方案一 ${f1} 元、方案二 ${f2} 元。下表以方案一、方案二的新票价为基准对比计次票：当计次票单次成本低于新方案票价，且 30 日内能用满票面次数时，购买更划算。</p>
     <div class="table-scroll">
       <table class="m-cards">
-        <tr><th>计次票</th><th>单次成本（用满）</th><th>较方案一（${f1} 元/次）</th><th>较方案二（${f2} 元/次）</th></tr>
-        ${passHtml}
+        <thead><tr><th>计次票</th><th>单次成本（用满）</th><th>较方案一（${f1} 元/次）</th><th>较方案二（${f2} 元/次）</th></tr></thead>
+        <tbody>${passHtml}</tbody>
       </table>
     </div>
     <h2 style="margin-top:16px;font-size:14px">满额优惠测算 <span class="tag">月累计满100元后部分9折 · 不与计次票叠加</span></h2>
@@ -687,8 +690,8 @@ function renderFareTable(){
   document.getElementById('fareTable').innerHTML=`
     <div class="table-scroll">
       <table>
-        <tr><th>乘距范围（公里）</th><th>现状（元）</th><th>方案一（元）</th><th>方案二（元）</th></tr>
-        ${rows}
+        <thead><tr><th>乘距范围（公里）</th><th>现状（元）</th><th>方案一（元）</th><th>方案二（元）</th></tr></thead>
+        <tbody>${rows}</tbody>
       </table>
     </div>`;
 }
