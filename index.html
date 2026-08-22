@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>上海轨道交通票价机制优化 · 对比计算器 V1.17</title>
+<title>上海轨道交通票价机制优化 · 对比计算器 V1.18</title>
 <style>
   :root{--bg1:#0f172a;--bg2:#1e3a8a;--panel:#fff;--ink:#1e293b;--muted:#64748b;--blue:#1d4ed8;--amber:#d97706;--green:#059669;--red:#dc2626;--soft:#f1f5f9;--line:#e2e8f0;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -143,16 +143,16 @@
 </head>
 <body>
 <header>
-  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.17</span></h1>
+  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.18</span></h1>
   <p>依据《优化上海市轨道交通票价机制听证方案》附件1：现行 / 方案一 / 方案二</p>
 </header>
 <div class="wrap">
   <div class="card">
     <details>
-      <summary>📌 版本更新说明（V1.17）</summary>
+      <summary>📌 版本更新说明（V1.18）</summary>
       <div class="changelog" style="margin-top:8px;">
-        <b>①-⑲</b>：见前版（全网真实里程、支线/环线精确数据、搜站/拼音/标注、满额优惠+公交换乘、路径明细与公式代入、里程系数校准默认101.5%、官方计价差异高亮提示等）。<br>
-        <b>⑳ V1.17</b>：手机端布局优化（起终点横向两列、票价卡片一行三列、对比表横向三列）；现行票价标注「基准（估算）」；每月乘坐次数默认 44 次（贴近工作日往返）。<br>
+        <b>①-⑳</b>：见前版（全网真实里程、支线/环线精确数据、搜站/拼音/标注、满额优惠+公交换乘、里程系数校准默认101.5%、官方计价差异高亮提示、手机端横向布局、基准（估算）、默认44次/月等）。<br>
+        <b>㉑ V1.18</b>：①「最短路径明细」默认折叠，点击展开；② 新增「优惠比价图表」折线图：展示现行/方案一/方案二在"计次票与满额优惠取更优"后的单次成本随每月乘坐次数变化曲线，标注当前次数并给出最佳优惠建议。<br>
       </div>
     </details>
   </div>
@@ -187,7 +187,7 @@
         <button onclick="loadOD('虹桥火车站','迪士尼')">虹桥火车站→迪士尼</button>
         <button onclick="loadOD('莘庄','闵行开发区')">莘庄→闵行开发区</button>
       </div>
-      <div class="note">结果区含「最短路径明细」「计价公式代入」。若与官方App不一致，请用 −/＋ 按钮或手动调整「全网里程系数」（默认 101.5%）。<br><mark class="hl">经官方票价数据和实际站点长度比对核查，官方票价的计算方式并未完全按照公布的6/16/26/36等跨区段范围来计价，比如2号线远东大道-浦东1号2号航站楼，官方票价为3元，实际长度8.21公里（百度地图查询长度8.5公里），落在票价4元范围内，类似此类票价不一致情况请悉知。</mark></div>
+      <div class="note">结果区含「最短路径明细（折叠）」「计价公式代入」「优惠比价图表」。若与官方App不一致，请用 −/＋ 按钮或手动调整「全网里程系数」（默认 101.5%）。<br><mark class="hl">经官方票价数据和实际站点长度比对核查，官方票价的计算方式并未完全按照公布的6/16/26/36等跨区段范围来计价，比如2号线远东大道-浦东1号2号航站楼，官方票价为3元，实际长度8.21公里（百度地图查询长度8.5公里），落在票价4元范围内，类似此类票价不一致情况请悉知。</mark></div>
     </div>
     <div id="panelDist" class="hidden">
       <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:8px;">输入乘车里程（公里），如全市平均乘距 16.45</label>
@@ -206,7 +206,7 @@
     </details>
   </div>
 </div>
-<footer>说明：① 票价严格按附件1口径；② 适用范围为全市轨道交通（不含磁浮线、金山铁路、市域机场线及以后开通的市域线）；③ 里程为数据源站间距累加，官方计费口径含车站体等附加空间，可用校准系数模拟；④ 公交换乘优惠：120分钟内换乘减1元，可与满额优惠叠加；⑤ 官方票价与公布区段表可能存在个别不一致，详见选站页高亮提示。</footer>
+<footer>说明：① 票价严格按附件1口径；② 适用范围为全市轨道交通（不含磁浮线、金山铁路、市域机场线及以后开通的市域线）；③ 里程为数据源站间距累加，官方计费口径含车站体等附加空间，可用校准系数模拟；④ 公交换乘优惠：120分钟内换乘减1元，可与满额优惠叠加；⑤ 计次票与满额优惠不可叠加，图表按两者取更优绘制；⑥ 官方票价与公布区段表可能存在个别不一致，详见选站页高亮提示。</footer>
 <script>
 function fareCurrent(d){ if(d<=0)return 0; if(d<=6)return 3; return 3+Math.ceil((d-6)/10); }
 function fareP1(d){ if(d<=0)return 0; const s=[4,4,4,7,7,7,10,10,10]; let x=4,p=3; if(d<=x)return p; for(const k of s){x+=k;p++;if(d<=x)return p;} return p+Math.ceil((d-67)/15); }
@@ -289,12 +289,14 @@ function maneCost(f,n){if(f<=0||n<=0)return{total:0,avg:0,discRides:0,fullRides:
  const full=Math.min(n,Math.ceil(100/f)),disc=n-full,total=full*f+disc*f*0.9;return{total,avg:total/n,discRides:disc,fullRides:full};}
 function bestPassForN(n){const P=[[45,210],[60,270],[90,390]];let best=null;
  for(const[r,p]of P){const k=Math.ceil(n/r),cost=k*p/n;if(!best||cost<best.cost)best={r,p,k,cost};}return best;}
+function bestPerRide(f,n){const base=busTransfer?Math.max(f-1,0):f;
+ const a=maneCost(base,n).avg;const b=bestPassForN(n).cost;return Math.min(a,b);}
 function updateMane(){const v=parseFloat(document.getElementById('monthRides').value);manRides=(v>0)?v:0;renderMane();}
 function updateBus(){busTransfer=document.getElementById('busChk').checked;renderMane();}
 function updateCalib(){calib.factor=Math.max(50,Math.min(200,parseFloat(document.getElementById('calibFactor').value)||100));if(lastRaw)render(lastRaw.d,lastRaw.title,lastRaw.tag,lastRaw.edges);}
 function stepFactor(d){calib.factor=Math.max(50,Math.min(200,Math.round((calib.factor+d)*10)/10));if(lastRaw)render(lastRaw.d,lastRaw.title,lastRaw.tag,lastRaw.edges);}
 function renderMane(){const box=document.getElementById('maneBox');if(!box)return;
- if(!lastCalc||!(manRides>0)){box.innerHTML='<p class="passhint">请输入每月乘坐次数后查看测算。</p>';return;}
+ if(!lastCalc||!(manRides>0)){box.innerHTML='<p class="passhint">请输入每月乘坐次数后查看测算。</p>';renderChart();return;}
  const n=manRides;
  const rows=[['现行',lastCalc.f0],['方案一',lastCalc.f1],['方案二',lastCalc.f2]].map(([label,f])=>{
   const base=busTransfer?Math.max(f-1,0):f;
@@ -306,7 +308,52 @@ function renderMane(){const box=document.getElementById('maneBox');if(!box)retur
  const b1=busTransfer?Math.max(lastCalc.f1-1,0):lastCalc.f1;
  const m1=maneCost(b1,n);
  box.innerHTML=`<div class="table-scroll"><table class="m-cards"><thead><tr><th>方案</th><th>单次票价</th><th>优惠后单次</th><th>月总支出</th><th>计次票方案</th><th>计次票单次</th><th>更省方案</th></tr></thead><tbody>${rows}</tbody></table></div>
- <p class="passhint">满额优惠：同一支付渠道每月累计满100元后部分9折；与计次票不可叠加。${busTransfer?'已含公交换乘优惠：每次先减1元，再按满额优惠对超100元部分打9折。':''}以方案一为例：单次 ${b1} 元，前 ${m1.fullRides} 次全价，之后 ${m1.discRides} 次9折。</p>`;}
+ <p class="passhint">满额优惠：同一支付渠道每月累计满100元后部分9折；与计次票不可叠加。${busTransfer?'已含公交换乘优惠：每次先减1元，再按满额优惠对超100元部分打9折。':''}以方案一为例：单次 ${b1} 元，前 ${m1.fullRides} 次全价，之后 ${m1.discRides} 次9折。</p>`;
+ renderChart();}
+/* ===== 优惠比价折线图 ===== */
+function renderChart(){
+ const box=document.getElementById('chartBox'),adv=document.getElementById('chartAdvice');
+ if(!box||!lastCalc)return;
+ const n=Math.min(Math.max(manRides>0?manRides:44,1),90);
+ const fares=[['现行',lastCalc.f0,'#64748b'],['方案一',lastCalc.f1,'#1d4ed8'],['方案二',lastCalc.f2,'#d97706']];
+ const W=680,H=340,L=46,R=12,T=18,B=44,nMax=90;
+ const yMax=Math.ceil(Math.max(lastCalc.f0,lastCalc.f1,lastCalc.f2))+1;
+ const X=v=>L+(v-1)/(nMax-1)*(W-L-R);
+ const Y=v=>T+(1-v/yMax)*(H-T-B);
+ let g='';
+ const yStep=yMax>12?4:(yMax>8?2:1);
+ for(let v=0;v<=yMax;v+=yStep){
+  g+=`<line x1="${L}" y1="${Y(v)}" x2="${W-R}" y2="${Y(v)}" stroke="#e2e8f0" stroke-width="1"/>`;
+  g+=`<text x="${L-6}" y="${Y(v)+4}" font-size="10" fill="#64748b" text-anchor="end">${v}</text>`;
+ }
+ for(let v=10;v<=nMax;v+=10){
+  g+=`<line x1="${X(v)}" y1="${T}" x2="${X(v)}" y2="${H-B}" stroke="#f1f5f9" stroke-width="1"/>`;
+  g+=`<text x="${X(v)}" y="${H-B+16}" font-size="10" fill="#64748b" text-anchor="middle">${v}</text>`;
+ }
+ g+=`<text x="${X(1)}" y="${H-B+16}" font-size="10" fill="#64748b" text-anchor="middle">1</text>`;
+ g+=`<text x="${L-6}" y="${T-6}" font-size="10" fill="#64748b" text-anchor="end">元/次</text>`;
+ g+=`<text x="${W-R}" y="${H-B+30}" font-size="10" fill="#64748b" text-anchor="end">每月乘坐次数 →</text>`;
+ let lines=`<line x1="${X(n)}" y1="${T}" x2="${X(n)}" y2="${H-B}" stroke="#94a3b8" stroke-dasharray="4 3" stroke-width="1"/>`;
+ fares.forEach(([name,f,color])=>{
+  const pts=[];
+  for(let i=1;i<=nMax;i++){pts.push(`${X(i).toFixed(1)},${Y(bestPerRide(f,i)).toFixed(1)}`);}
+  lines+=`<polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2"/>`;
+  lines+=`<circle cx="${X(n)}" cy="${Y(bestPerRide(f,n))}" r="4" fill="${color}" stroke="#fff" stroke-width="1.5"/>`;
+ });
+ let legend='';
+ fares.forEach(([name,f,color],i)=>{legend+=`<text x="${L+i*110}" y="${H-6}" font-size="11" fill="${color}">■ ${name}（${f}元）</text>`;});
+ box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:10px;">${g}${lines}${legend}</svg>`;
+ const opts=fares.map(([name,f,color])=>{
+  const base=busTransfer?Math.max(f-1,0):f;
+  const a=maneCost(base,n).avg,bp=bestPassForN(n);
+  const usePass=bp.cost<=a;
+  return {name,color,a,bp,usePass,best:Math.min(a,bp.cost)};
+ });
+ const overall=opts.slice().sort((x,y)=>x.best-y.best)[0];
+ adv.innerHTML=`💡 最佳优惠建议（按 ${n} 次/月，计次票与满额优惠取更优）：`+
+  opts.map(o=>`${o.name} ≈ <b>${fmt(o.best)} 元/次</b>（${o.usePass?('购 '+o.bp.k+'×'+o.bp.r+' 次票'):'满额优惠'}）`).join('；')+
+  `。综合最划算：<span style="color:${overall.color};font-weight:700">${overall.name}</span>。注：计次票与满额优惠不可叠加；虚线为当前次数。`;
+}
 function compute(){const a=document.getElementById('stnA').value,b=document.getElementById('stnB').value;if(!a||!b)return;
  if(a===b){render(0,a+' → '+b,'同站',[]);return;}
  const r=shortest(a,b);
@@ -317,7 +364,7 @@ function fmt(n){return(Math.round(n*100)/100).toString();}
 function pathHTML(legs){if(!legs||!legs.length)return '';
  const tr=Math.max(legs.length-1,0);let rows='';
  legs.forEach((lg,i)=>{rows+=`<tr><td>${'①②③④⑤'[i]||('['+(i+1)+']')} ${lg.line}：${lg.from} → ${lg.to}</td><td data-label="站数">${lg.n} 个区间</td><td data-label="距离">${fmt(lg.w/1000)} km</td></tr>`;});
- return `<h2 style="margin-top:16px;font-size:14px">🧭 最短路径明细 <span class="tag">换乘 ${tr} 次</span></h2><div class="table-scroll"><table class="m-cards"><thead><tr><th>乘坐段</th><th>站数</th><th>距离</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
+ return `<details style="margin-top:16px"><summary>🧭 最短路径明细 <span class="tag">换乘 ${tr} 次 · 共 ${legs.length} 段 · 点击展开</span></summary><div class="table-scroll"><table class="m-cards"><thead><tr><th>乘坐段</th><th>站数</th><th>距离</th></tr></thead><tbody>${rows}</tbody></table></div></details>`;}
 function render(d,title,tag,edges){
  lastRaw={d,title,tag,edges};
  const legs=edges?buildLegs(edges):[];
@@ -370,7 +417,10 @@ function render(d,title,tag,edges){
   <div class="manewrap"><label for="monthRides">每月乘坐次数：</label><input type="number" id="monthRides" min="1" step="1" value="${manRides}" inputmode="numeric" oninput="updateMane()"><span style="color:var(--muted);font-size:12px;">次（默认按工作日往返 44 次/月）</span>
    <label class="chk"><input type="checkbox" id="busChk" ${busTransfer?'checked':''} onchange="updateBus()"> 公交换乘优惠（120分钟内换乘减1元/次）</label>
   </div>
-  <div id="maneBox"></div>`;
+  <div id="maneBox"></div>
+  <h2 style="margin-top:16px;font-size:14px">📈 优惠比价图表 <span class="tag">单次成本随每月次数变化 · 计次票/满额优惠取更优</span></h2>
+  <div id="chartBox"></div>
+  <p class="passhint" id="chartAdvice"></p>`;
  renderMane();}
 function renderFareTable(){let rows=TABLE.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
  document.getElementById('fareTable').innerHTML=`<div class="table-scroll"><table><thead><tr><th>乘距范围（公里）</th><th>现状（元）</th><th>方案一（元）</th><th>方案二（元）</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
