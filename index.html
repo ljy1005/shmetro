@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>上海轨道交通票价机制优化 · 对比计算器 V1.21</title>
+<title>上海轨道交通票价机制优化 · 对比计算器 V1.22</title>
 <style>
 :root{--bg1:#0f172a;--bg2:#1e3a8a;--panel:#fff;--ink:#1e293b;--muted:#64748b;--blue:#1d4ed8;--amber:#d97706;--green:#059669;--red:#dc2626;--soft:#f1f5f9;--line:#e2e8f0;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -104,16 +104,16 @@ input[type=number]{max-width:320px;}
 </head>
 <body>
 <header>
-  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.21</span></h1>
+  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.22</span></h1>
   <p>依据《优化上海市轨道交通票价机制听证方案》附件1：现行 / 方案一 / 方案二</p>
 </header>
 <div class="wrap">
   <div class="card">
     <details>
-      <summary>📌 版本更新说明（V1.21）</summary>
+      <summary>📌 版本更新说明（V1.22）</summary>
       <div class="changelog" style="margin-top:8px;">
-        <b>①-㉓</b>：见前版（全网真实里程、支线/环线精确数据、搜站/拼音/标注、满额优惠+公交换乘、里程系数校准默认101.5%、官方计价差异高亮提示、手机端横向布局、路径明细折叠、优惠比价图按实际规则独立绘制且Y轴上限20元等）。<br>
-        <b>㉔ V1.21</b>：修复个别环境下代码不完整导致功能失效的问题；页脚新增「脚本完整性校验标记」，加载后显示"V1.21 · 脚本完整加载 ✔"即代表文件完整。<br>
+        <b>①-㉔</b>：见前版（全网真实里程、支线/环线精确数据、搜站/拼音/标注、满额优惠+公交换乘、里程系数校准默认101.5%、官方计价差异高亮提示、手机端横向布局、路径明细折叠、优惠比价图Y轴上限20元、脚本完整性校验等）。<br>
+        <b>㉕ V1.22</b>：修复「最短路径明细」线路名显示 undefined 的问题——建图边补回线路字段，现可正确分段显示（如 ①8号线：芦恒路→耀华路 ②7号线：耀华路→龙阳路）及换乘次数。<br>
       </div>
     </details>
   </div>
@@ -166,7 +166,7 @@ input[type=number]{max-width:320px;}
     </details>
   </div>
 </div>
-<footer>说明：① 票价严格按附件1口径；② 适用范围为全市轨道交通（不含磁浮线、金山铁路、市域机场线及以后开通的市域线）；③ 里程为数据源站间距累加，官方计费口径含车站体等附加空间，可用校准系数模拟；④ 公交换乘优惠：120分钟内换乘减1元，可与满额优惠叠加；⑤ 计次票与满额优惠不可叠加；⑥ 官方票价与公布区段表可能存在个别不一致，详见选站页高亮提示。<br><span id="integrity" style="color:#fde047;font-weight:600;">（完整性校验中…若本行未变为"V1.21 · 脚本完整加载 ✔"，说明文件保存不完整，请重新完整复制本代码，务必以 &lt;/html&gt; 结尾）</span></footer>
+<footer>说明：① 票价严格按附件1口径；② 适用范围为全市轨道交通（不含磁浮线、金山铁路、市域机场线及以后开通的市域线）；③ 里程为数据源站间距累加，官方计费口径含车站体等附加空间，可用校准系数模拟；④ 公交换乘优惠：120分钟内换乘减1元，可与满额优惠叠加；⑤ 计次票与满额优惠不可叠加；⑥ 官方票价与公布区段表可能存在个别不一致，详见选站页高亮提示。<br><span id="integrity" style="color:#fde047;font-weight:600;">（完整性校验中…若本行未变为"V1.22 · 脚本完整加载 ✔"，说明文件保存不完整，请重新完整复制本代码，务必以 &lt;/html&gt; 结尾）</span></footer>
 <script>
 function fareCurrent(d){if(d<=0)return 0;if(d<=6)return 3;return 3+Math.ceil((d-6)/10);}
 function fareP1(d){if(d<=0)return 0;var s=[4,4,4,7,7,7,10,10,10],x=4,p=3;if(d<=x)return p;for(var i=0;i<s.length;i++){x+=s[i];p++;if(d<=x)return p;}return p+Math.ceil((d-67)/15);}
@@ -196,18 +196,19 @@ var SEGMENTS=[
 {l:'浦江线',s:[['沈杜公路',0],['三鲁公路',1972],['闵瑞路',2985],['浦航路',3761],['东城一路',4942],['汇臻路',6294]]}
 ];
 var LINE_COLORS={'1号线':'#E4002B','2号线':'#8FC31F','3号线':'#FFD100','4号线':'#5F259F','5号线':'#B41E91','6号线':'#C6168D','7号线':'#F37021','8号线':'#00A3E0','9号线':'#71C5E8','10号线':'#BFA8D8','11号线':'#A32035','12号线':'#007A60','13号线':'#E91195','14号线':'#727D13','15号线':'#D6A461','16号线':'#2BB673','17号线':'#C28840','18号线':'#8C6A45','浦江线':'#8A9BA8'};
+/* V1.22 修复：建图边补回 line 字段，保证路径明细正确显示线路名 */
 var adj={};
 SEGMENTS.forEach(function(seg){var st=seg.s;
  for(var i=1;i<st.length;i++){var a=st[i-1],b=st[i],w=Math.abs(b[1]-a[1]);if(w<=0)continue;
-  (adj[a[0]]=adj[a[0]]||[]).push({to:b[0],w:w});(adj[b[0]]=adj[b[0]]||[]).push({to:a[0],w:w});}
+  (adj[a[0]]=adj[a[0]]||[]).push({to:b[0],w:w,line:seg.l});(adj[b[0]]=adj[b[0]]||[]).push({to:a[0],w:w,line:seg.l});}
  if(seg.ring&&st.length>2){var f=st[0],l=st[st.length-1],w2=seg.cd||1000;
-  (adj[l[0]]=adj[l[0]]||[]).push({to:f[0],w:w2});(adj[f[0]]=adj[f[0]]||[]).push({to:l[0],w:w2});}});
+  (adj[l[0]]=adj[l[0]]||[]).push({to:f[0],w:w2,line:seg.l});(adj[f[0]]=adj[f[0]]||[]).push({to:l[0],w:w2,line:seg.l});}});
 function shortest(a,b){if(a===b)return{d:0,edges:[]};
  var dist={},vis={},pq=[[0,a]],prev={};dist[a]=0;
  while(pq.length){pq.sort(function(x,y){return x[0]-y[0];});var t=pq.shift(),d=t[0],u=t[1];if(vis[u])continue;vis[u]=true;if(u===b)break;
-  (adj[u]||[]).forEach(function(e){var nd=d+e.w;if(nd<(dist[e.to]===undefined?Infinity:dist[e.to])){dist[e.to]=nd;prev[e.to]={from:u,w:e.w};pq.push([nd,e.to]);}});}
+  (adj[u]||[]).forEach(function(e){var nd=d+e.w;if(nd<(dist[e.to]===undefined?Infinity:dist[e.to])){dist[e.to]=nd;prev[e.to]={from:u,w:e.w,line:e.line};pq.push([nd,e.to]);}});}
  if(!(b in dist))return null;
- var edges=[],c=b;while(c!==a){var p=prev[c];edges.unshift({from:p.from,to:c,w:p.w});c=p.from;}
+ var edges=[],c=b;while(c!==a){var p=prev[c];edges.unshift({from:p.from,to:c,w:p.w,line:p.line});c=p.from;}
  return{d:dist[b],edges:edges};}
 function buildLegs(edges){var legs=[];edges.forEach(function(e){var l=legs[legs.length-1];
  if(l&&l.line===e.line){l.to=e.to;l.w+=e.w;l.n++;}else legs.push({line:e.line,from:e.from,to:e.to,w:e.w,n:1});});return legs;}
@@ -377,7 +378,7 @@ fillStations('A');fillStations('B');
 document.getElementById('stnA').value='芦恒路';document.getElementById('stnB').value='龙阳路';
 renderFareTable();
 compute();
-var integ=document.getElementById('integrity');if(integ)integ.textContent='V1.21 · 脚本完整加载 ✔';
+var integ=document.getElementById('integrity');if(integ)integ.textContent='V1.22 · 脚本完整加载 ✔';
 </script>
 </body>
 </html>
