@@ -3,160 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>上海轨道交通票价机制优化 · 对比计算器 V1.18</title>
+<title>上海轨道交通票价机制优化 · 对比计算器 V1.21</title>
 <style>
-  :root{--bg1:#0f172a;--bg2:#1e3a8a;--panel:#fff;--ink:#1e293b;--muted:#64748b;--blue:#1d4ed8;--amber:#d97706;--green:#059669;--red:#dc2626;--soft:#f1f5f9;--line:#e2e8f0;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{scroll-behavior:smooth;}
-  body{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2) 160%);color:var(--ink);min-height:100vh;padding-bottom:calc(40px + env(safe-area-inset-bottom));overflow-x:hidden;}
-  header{color:#fff;text-align:center;padding:26px 16px 16px;}
-  header h1{font-size:23px;letter-spacing:1px;line-height:1.5;}
-  .ver{display:inline-block;vertical-align:middle;margin-left:8px;font-size:12px;font-weight:700;background:#fbbf24;color:#7c2d12;padding:3px 10px;border-radius:14px;}
-  header p{margin-top:8px;font-size:13px;color:#bfdbfe;line-height:1.7;}
-  .wrap{max-width:980px;margin:0 auto;padding:0 14px;}
-  .card{background:var(--panel);border-radius:14px;padding:18px 20px;box-shadow:0 8px 24px rgba(15,23,42,.28);margin-bottom:16px;}
-  .card h2{font-size:16px;margin-bottom:12px;line-height:1.6;}
-  .tag{font-size:11px;background:var(--soft);color:var(--muted);padding:2px 8px;border-radius:20px;font-weight:normal;margin-left:6px;display:inline-block;}
-  .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
-  .tabs button{border:1px solid var(--line);background:#fff;padding:10px 18px;border-radius:20px;cursor:pointer;font-size:13px;color:var(--muted);min-height:42px;}
-  .tabs button.on{background:var(--blue);border-color:var(--blue);color:#fff;}
-  .searchwrap{margin-bottom:16px;}
-  .searchwrap .slabel{font-size:13px;color:var(--muted);margin-bottom:6px;display:block;}
-  .searchbox{position:relative;}
-  .searchbox input{width:100%;padding:12px 44px 12px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:#fff;color:var(--ink);outline:none;}
-  .searchbox input:focus{border-color:var(--blue);}
-  .clearbtn{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:none;background:var(--soft);width:28px;height:28px;border-radius:50%;cursor:pointer;color:var(--muted);font-size:16px;line-height:1;}
-  .searchres{margin-top:8px;border:1px solid var(--line);border-radius:10px;max-height:280px;overflow-y:auto;background:#fff;-webkit-overflow-scrolling:touch;}
-  .srow{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
-  .srow:last-child{border-bottom:none;}
-  .sname{font-weight:600;font-size:14px;}
-  .sname b{color:var(--blue);}
-  .spy{font-size:10px;color:var(--muted);letter-spacing:1px;background:var(--soft);padding:2px 6px;border-radius:6px;white-space:nowrap;}
-  .slines{display:flex;gap:4px;flex-wrap:wrap;}
-  .sline{font-size:11px;color:#fff;padding:2px 8px;border-radius:10px;white-space:nowrap;}
-  .sbtns{margin-left:auto;display:flex;gap:6px;}
-  .sbtns button{font-size:12px;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer;min-height:30px;}
-  .sbtns button.a{color:var(--red);border-color:#fecaca;}
-  .sbtns button.b{color:var(--green);border-color:#bbf7d0;}
-  .sempty{padding:14px;text-align:center;font-size:13px;color:var(--muted);}
-  .pickers{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:end;}
-  .pcol label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
-  .pcol .dotA{color:var(--red);} .pcol .dotB{color:var(--green);}
-  select,input[type=number]{width:100%;padding:12px 10px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:#fff;color:var(--ink);outline:none;}
-  select{margin-bottom:8px;}
-  select:focus,input[type=number]:focus{border-color:var(--blue);}
-  .swapbtn{border:none;background:var(--soft);color:var(--blue);padding:12px 18px;border-radius:10px;cursor:pointer;font-size:14px;min-height:46px;align-self:center;}
-  .examples{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
-  .examples span{font-size:12px;color:var(--muted);}
-  .examples button{font-size:12px;border:1px dashed var(--line);background:#fff;padding:8px 10px;border-radius:14px;cursor:pointer;color:var(--ink);min-height:34px;}
-  .note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.9;background:var(--soft);padding:10px 12px;border-radius:10px;word-break:break-word;}
-  .note mark.hl{background:#fde047;color:#7c2d12;font-weight:600;padding:2px 6px;border-radius:4px;}
-  .changelog{font-size:12px;color:var(--ink);line-height:1.9;}
-  .changelog b{color:var(--blue);}
-  .route{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;}
-  .route .od{font-size:18px;font-weight:700;word-break:break-word;}
-  .route .dist{font-size:13px;background:var(--soft);padding:5px 12px;border-radius:16px;color:var(--muted);}
-  .route .range{font-size:12px;color:var(--muted);}
-  .calib{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 6px;font-size:13px;color:var(--ink);background:var(--soft);padding:10px 12px;border-radius:10px;}
-  .calib input[type=number]{width:70px;max-width:70px;padding:6px 8px;font-size:14px;margin:0 4px;text-align:center;}
-  .calib label{display:flex;align-items:center;gap:4px;white-space:nowrap;}
-  .stepbtn{width:36px;height:36px;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:20px;line-height:1;cursor:pointer;color:var(--blue);padding:0;flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
-  .stepbtn:active{background:var(--blue);color:#fff;}
-  .calib-hint{color:var(--red);font-weight:600;font-size:13px;margin:0 0 12px;background:#fef2f2;padding:8px 12px;border-radius:6px;border:1px dashed var(--red);line-height:1.5;}
-  .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-  .pcard{border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;min-width:0;}
-  .pcard .pname{font-size:13px;color:var(--muted);}
-  .pcard .pval{font-size:32px;font-weight:800;margin:4px 0;}
-  .pcard .psub{font-size:12px;}
-  .pcard.cur{border-top:4px solid var(--muted);}
-  .pcard.p1{border-top:4px solid var(--blue);}
-  .pcard.p2{border-top:4px solid var(--amber);}
-  .up{color:var(--red);font-weight:600;} .same{color:var(--green);font-weight:600;}
-  .barwrap{margin:16px 0 4px;}
-  .brow{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;}
-  .brow .bl{width:70px;color:var(--muted);flex-shrink:0;}
-  .brow .bt{flex:1;height:16px;background:var(--soft);border-radius:8px;overflow:hidden;min-width:80px;}
-  .brow .bt i{display:block;height:100%;border-radius:8px;}
-  .brow .bv{width:60px;text-align:right;font-weight:600;flex-shrink:0;}
-  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;padding-bottom:2px;}
-  .table-scroll table{margin-top:0;min-width:560px;}
-  table.m-keep{min-width:0;}
-  table{width:100%;border-collapse:collapse;font-size:13px;}
-  th,td{border-bottom:1px solid var(--line);padding:9px 6px;text-align:center;vertical-align:top;word-break:break-word;}
-  th{background:var(--soft);color:var(--muted);}
-  .passhint{font-size:12px;color:var(--muted);margin:6px 0;line-height:1.7;}
-  details{margin-top:14px;}
-  summary{cursor:pointer;font-size:14px;color:var(--blue);font-weight:600;line-height:1.7;}
-  footer{max-width:980px;margin:6px auto 0;padding:0 14px;color:#93c5fd;font-size:12px;line-height:1.9;}
-  .hidden{display:none;}
-  .go{width:100%;margin-top:14px;padding:13px;border:none;border-radius:10px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);color:#fff;font-size:16px;letter-spacing:3px;cursor:pointer;min-height:48px;}
-  input[type=number]{max-width:320px;}
-  .mini{font-size:11px;color:var(--muted);font-weight:normal;margin-top:3px;line-height:1.5;}
-  .manewrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:13px;color:var(--ink);}
-  .manewrap input[type=number]{width:100px;max-width:100px;padding:8px 10px;font-size:15px;margin:0;}
-  .manewrap .chk{display:flex;align-items:center;gap:4px;margin-left:6px;font-size:12px;color:var(--ink);white-space:normal;}
-  @media(max-width:720px){
-    table.m-cards{min-width:0;}
-    table.m-cards thead{display:none;}
-    table.m-cards,table.m-cards tbody{display:block;}
-    table.m-cards tr{display:block;border:1px solid var(--line);border-radius:10px;margin:0 0 10px;padding:10px 12px;background:#fff;}
-    table.m-cards td{display:flex;justify-content:space-between;align-items:flex-start;border:none;padding:4px 0;text-align:right;font-size:12px;word-break:normal;}
-    table.m-cards td::before{content:attr(data-label);color:var(--muted);font-weight:600;margin-right:10px;text-align:left;flex-shrink:0;}
-    table.m-cards td:first-child{display:block;font-weight:700;color:var(--ink);font-size:13px;padding:0 0 6px;border-bottom:1px dashed var(--line);margin-bottom:4px;text-align:left;}
-    table.m-cards td:first-child::before{content:none;}
-    table.m-keep th,table.m-keep td{padding:6px 4px;font-size:11px;}
-  }
-  @media(max-width:720px){
-    header{padding:22px 14px 12px;} header h1{font-size:19px;} header p{font-size:12px;}
-    .wrap{padding:0 10px;} .card{padding:14px 12px;border-radius:12px;} .card h2{font-size:15px;}
-    .pickers{grid-template-columns:1fr auto 1fr;gap:8px;align-items:end;}
-    .swapbtn{width:42px;height:42px;min-height:42px;padding:0;border-radius:50%;font-size:15px;}
-    .pcol select{padding:10px 8px;}
-    .pcol label{font-size:12px;}
-    .cards3{gap:8px;}
-    .pcard{padding:10px 4px;border-radius:10px;}
-    .pcard .pname{font-size:11px;}
-    .pcard .pval{font-size:22px;margin:2px 0;}
-    .pcard .psub{font-size:10px;}
-    .route{gap:8px;} .route .od{font-size:17px;} .route .dist,.route .range{font-size:12px;}
-    .brow{font-size:12px;gap:8px;} .brow .bl{width:54px;} .brow .bv{width:54px;}
-    th,td{padding:8px 5px;font-size:12px;} .passhint{font-size:11px;} .mini{font-size:10px;}
-    footer{font-size:11px;padding:0 10px;}
-    .calib{flex-direction:column;align-items:flex-start;gap:8px;}
-  }
-  @media(max-width:560px){
-    .tabs{flex-direction:column;} .tabs button{width:100%;}
-    header h1{font-size:17px;} header p{font-size:11px;}
-    .examples button{font-size:11px;padding:7px 9px;} .note{font-size:11px;}
-    .pickers{gap:6px;}
-    .swapbtn{width:38px;height:38px;min-height:38px;font-size:14px;}
-    .pcard .pval{font-size:20px;}
-    .pcard .pname{font-size:10px;}
-    .pcard .psub{font-size:9px;}
-    .go{letter-spacing:1px;font-size:15px;}
-    input[type=number]{max-width:none;}
-    .manewrap input[type=number]{max-width:100px;}
-    .sbtns{margin-left:0;width:100%;} .sbtns button{flex:1;}
-  }
-  @media(max-width:380px){header h1{font-size:16px;} .card{padding:12px 10px;} .pcard .pval{font-size:18px;} table.m-keep th,table.m-keep td{padding:5px 3px;font-size:10px;}}
+:root{--bg1:#0f172a;--bg2:#1e3a8a;--panel:#fff;--ink:#1e293b;--muted:#64748b;--blue:#1d4ed8;--amber:#d97706;--green:#059669;--red:#dc2626;--soft:#f1f5f9;--line:#e2e8f0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2) 160%);color:var(--ink);min-height:100vh;padding-bottom:calc(40px + env(safe-area-inset-bottom));overflow-x:hidden;}
+header{color:#fff;text-align:center;padding:26px 16px 16px;}
+header h1{font-size:23px;letter-spacing:1px;line-height:1.5;}
+.ver{display:inline-block;vertical-align:middle;margin-left:8px;font-size:12px;font-weight:700;background:#fbbf24;color:#7c2d12;padding:3px 10px;border-radius:14px;}
+header p{margin-top:8px;font-size:13px;color:#bfdbfe;line-height:1.7;}
+.wrap{max-width:980px;margin:0 auto;padding:0 14px;}
+.card{background:var(--panel);border-radius:14px;padding:18px 20px;box-shadow:0 8px 24px rgba(15,23,42,.28);margin-bottom:16px;}
+.card h2{font-size:16px;margin-bottom:12px;line-height:1.6;}
+.tag{font-size:11px;background:var(--soft);color:var(--muted);padding:2px 8px;border-radius:20px;font-weight:normal;margin-left:6px;display:inline-block;}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.tabs button{border:1px solid var(--line);background:#fff;padding:10px 18px;border-radius:20px;cursor:pointer;font-size:13px;color:var(--muted);min-height:42px;}
+.tabs button.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+.searchwrap{margin-bottom:16px;}
+.searchwrap .slabel{font-size:13px;color:var(--muted);margin-bottom:6px;display:block;}
+.searchbox{position:relative;}
+.searchbox input{width:100%;padding:12px 44px 12px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:#fff;color:var(--ink);outline:none;}
+.searchbox input:focus{border-color:var(--blue);}
+.clearbtn{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:none;background:var(--soft);width:28px;height:28px;border-radius:50%;cursor:pointer;color:var(--muted);font-size:16px;line-height:1;}
+.searchres{margin-top:8px;border:1px solid var(--line);border-radius:10px;max-height:280px;overflow-y:auto;background:#fff;-webkit-overflow-scrolling:touch;}
+.srow{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+.srow:last-child{border-bottom:none;}
+.sname{font-weight:600;font-size:14px;}
+.sname b{color:var(--blue);}
+.spy{font-size:10px;color:var(--muted);letter-spacing:1px;background:var(--soft);padding:2px 6px;border-radius:6px;white-space:nowrap;}
+.slines{display:flex;gap:4px;flex-wrap:wrap;}
+.sline{font-size:11px;color:#fff;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.sbtns{margin-left:auto;display:flex;gap:6px;}
+.sbtns button{font-size:12px;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer;min-height:30px;}
+.sbtns button.a{color:var(--red);border-color:#fecaca;}
+.sbtns button.b{color:var(--green);border-color:#bbf7d0;}
+.sempty{padding:14px;text-align:center;font-size:13px;color:var(--muted);}
+.pickers{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:end;}
+.pcol label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
+.pcol .dotA{color:var(--red);} .pcol .dotB{color:var(--green);}
+select,input[type=number]{width:100%;padding:12px 10px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:#fff;color:var(--ink);outline:none;}
+select{margin-bottom:8px;}
+select:focus,input[type=number]:focus{border-color:var(--blue);}
+.swapbtn{border:none;background:var(--soft);color:var(--blue);padding:12px 18px;border-radius:10px;cursor:pointer;font-size:14px;min-height:46px;align-self:center;}
+.examples{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.examples span{font-size:12px;color:var(--muted);}
+.examples button{font-size:12px;border:1px dashed var(--line);background:#fff;padding:8px 10px;border-radius:14px;cursor:pointer;color:var(--ink);min-height:34px;}
+.note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.9;background:var(--soft);padding:10px 12px;border-radius:10px;word-break:break-word;}
+.note mark.hl{background:#fde047;color:#7c2d12;font-weight:600;padding:2px 6px;border-radius:4px;}
+.changelog{font-size:12px;color:var(--ink);line-height:1.9;}
+.changelog b{color:var(--blue);}
+.route{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;}
+.route .od{font-size:18px;font-weight:700;word-break:break-word;}
+.route .dist{font-size:13px;background:var(--soft);padding:5px 12px;border-radius:16px;color:var(--muted);}
+.route .range{font-size:12px;color:var(--muted);}
+.calib{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 6px;font-size:13px;color:var(--ink);background:var(--soft);padding:10px 12px;border-radius:10px;}
+.calib input[type=number]{width:70px;max-width:70px;padding:6px 8px;font-size:14px;margin:0 4px;text-align:center;}
+.calib label{display:flex;align-items:center;gap:4px;white-space:nowrap;}
+.stepbtn{width:36px;height:36px;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:20px;line-height:1;cursor:pointer;color:var(--blue);padding:0;flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.stepbtn:active{background:var(--blue);color:#fff;}
+.calib-hint{color:var(--red);font-weight:600;font-size:13px;margin:0 0 12px;background:#fef2f2;padding:8px 12px;border-radius:6px;border:1px dashed var(--red);line-height:1.5;}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.pcard{border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;min-width:0;}
+.pcard .pname{font-size:13px;color:var(--muted);}
+.pcard .pval{font-size:32px;font-weight:800;margin:4px 0;}
+.pcard .psub{font-size:12px;}
+.pcard.cur{border-top:4px solid var(--muted);}
+.pcard.p1{border-top:4px solid var(--blue);}
+.pcard.p2{border-top:4px solid var(--amber);}
+.up{color:var(--red);font-weight:600;} .same{color:var(--green);font-weight:600;}
+.barwrap{margin:16px 0 4px;}
+.brow{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;}
+.brow .bl{width:70px;color:var(--muted);flex-shrink:0;}
+.brow .bt{flex:1;height:16px;background:var(--soft);border-radius:8px;overflow:hidden;min-width:80px;}
+.brow .bt i{display:block;height:100%;border-radius:8px;}
+.brow .bv{width:60px;text-align:right;font-weight:600;flex-shrink:0;}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;padding-bottom:2px;}
+.table-scroll table{margin-top:0;min-width:560px;}
+table.m-keep{min-width:0;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th,td{border-bottom:1px solid var(--line);padding:9px 6px;text-align:center;vertical-align:top;word-break:break-word;}
+th{background:var(--soft);color:var(--muted);}
+.passhint{font-size:12px;color:var(--muted);margin:6px 0;line-height:1.7;}
+details{margin-top:14px;}
+summary{cursor:pointer;font-size:14px;color:var(--blue);font-weight:600;line-height:1.7;}
+#chartLegend{display:flex;flex-wrap:wrap;margin:6px 0;}
+.lg{display:inline-flex;align-items:center;gap:4px;margin:2px 12px 2px 0;font-size:11px;color:var(--muted);white-space:nowrap;}
+footer{max-width:980px;margin:6px auto 0;padding:0 14px;color:#93c5fd;font-size:12px;line-height:1.9;}
+.hidden{display:none;}
+.go{width:100%;margin-top:14px;padding:13px;border:none;border-radius:10px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);color:#fff;font-size:16px;letter-spacing:3px;cursor:pointer;min-height:48px;}
+input[type=number]{max-width:320px;}
+.mini{font-size:11px;color:var(--muted);font-weight:normal;margin-top:3px;line-height:1.5;}
+.manewrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:13px;color:var(--ink);}
+.manewrap input[type=number]{width:100px;max-width:100px;padding:8px 10px;font-size:15px;margin:0;}
+.manewrap .chk{display:flex;align-items:center;gap:4px;margin-left:6px;font-size:12px;color:var(--ink);white-space:normal;}
+@media(max-width:720px){table.m-cards{min-width:0;}table.m-cards thead{display:none;}table.m-cards,table.m-cards tbody{display:block;}table.m-cards tr{display:block;border:1px solid var(--line);border-radius:10px;margin:0 0 10px;padding:10px 12px;background:#fff;}table.m-cards td{display:flex;justify-content:space-between;align-items:flex-start;border:none;padding:4px 0;text-align:right;font-size:12px;word-break:normal;}table.m-cards td::before{content:attr(data-label);color:var(--muted);font-weight:600;margin-right:10px;text-align:left;flex-shrink:0;}table.m-cards td:first-child{display:block;font-weight:700;color:var(--ink);font-size:13px;padding:0 0 6px;border-bottom:1px dashed var(--line);margin-bottom:4px;text-align:left;}table.m-cards td:first-child::before{content:none;}table.m-keep th,table.m-keep td{padding:6px 4px;font-size:11px;}}
+@media(max-width:720px){header{padding:22px 14px 12px;}header h1{font-size:19px;}header p{font-size:12px;}.wrap{padding:0 10px;}.card{padding:14px 12px;border-radius:12px;}.card h2{font-size:15px;}.pickers{grid-template-columns:1fr auto 1fr;gap:8px;align-items:end;}.swapbtn{width:42px;height:42px;min-height:42px;padding:0;border-radius:50%;font-size:15px;}.pcol select{padding:10px 8px;}.pcol label{font-size:12px;}.cards3{gap:8px;}.pcard{padding:10px 4px;border-radius:10px;}.pcard .pname{font-size:11px;}.pcard .pval{font-size:22px;margin:2px 0;}.pcard .psub{font-size:10px;}.route{gap:8px;}.route .od{font-size:17px;}.route .dist,.route .range{font-size:12px;}.brow{font-size:12px;gap:8px;}.brow .bl{width:54px;}.brow .bv{width:54px;}th,td{padding:8px 5px;font-size:12px;}.passhint{font-size:11px;}.mini{font-size:10px;}footer{font-size:11px;padding:0 10px;}.calib{flex-direction:column;align-items:flex-start;gap:8px;}}
+@media(max-width:560px){.tabs{flex-direction:column;}.tabs button{width:100%;}header h1{font-size:17px;}header p{font-size:11px;}.examples button{font-size:11px;padding:7px 9px;}.note{font-size:11px;}.pickers{gap:6px;}.swapbtn{width:38px;height:38px;min-height:38px;font-size:14px;}.pcard .pval{font-size:20px;}.pcard .pname{font-size:10px;}.pcard .psub{font-size:9px;}.go{letter-spacing:1px;font-size:15px;}input[type=number]{max-width:none;}.manewrap input[type=number]{max-width:100px;}.sbtns{margin-left:0;width:100%;}.sbtns button{flex:1;}}
+@media(max-width:380px){header h1{font-size:16px;}.card{padding:12px 10px;}.pcard .pval{font-size:18px;}table.m-keep th,table.m-keep td{padding:5px 3px;font-size:10px;}}
 </style>
 </head>
 <body>
 <header>
-  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.18</span></h1>
+  <h1>上海市轨道交通票价机制优化 · 对比计算器 <span class="ver">V1.21</span></h1>
   <p>依据《优化上海市轨道交通票价机制听证方案》附件1：现行 / 方案一 / 方案二</p>
 </header>
 <div class="wrap">
   <div class="card">
     <details>
-      <summary>📌 版本更新说明（V1.18）</summary>
+      <summary>📌 版本更新说明（V1.21）</summary>
       <div class="changelog" style="margin-top:8px;">
-        <b>①-⑳</b>：见前版（全网真实里程、支线/环线精确数据、搜站/拼音/标注、满额优惠+公交换乘、里程系数校准默认101.5%、官方计价差异高亮提示、手机端横向布局、基准（估算）、默认44次/月等）。<br>
-        <b>㉑ V1.18</b>：①「最短路径明细」默认折叠，点击展开；② 新增「优惠比价图表」折线图：展示现行/方案一/方案二在"计次票与满额优惠取更优"后的单次成本随每月乘坐次数变化曲线，标注当前次数并给出最佳优惠建议。<br>
+        <b>①-㉓</b>：见前版（全网真实里程、支线/环线精确数据、搜站/拼音/标注、满额优惠+公交换乘、里程系数校准默认101.5%、官方计价差异高亮提示、手机端横向布局、路径明细折叠、优惠比价图按实际规则独立绘制且Y轴上限20元等）。<br>
+        <b>㉔ V1.21</b>：修复个别环境下代码不完整导致功能失效的问题；页脚新增「脚本完整性校验标记」，加载后显示"V1.21 · 脚本完整加载 ✔"即代表文件完整。<br>
       </div>
     </details>
   </div>
-
   <div class="card">
     <div class="tabs">
       <button id="tabStation" class="on" onclick="setTab('station')">🚇 按车站选择（线路→站点）</button>
@@ -206,232 +166,218 @@
     </details>
   </div>
 </div>
-<footer>说明：① 票价严格按附件1口径；② 适用范围为全市轨道交通（不含磁浮线、金山铁路、市域机场线及以后开通的市域线）；③ 里程为数据源站间距累加，官方计费口径含车站体等附加空间，可用校准系数模拟；④ 公交换乘优惠：120分钟内换乘减1元，可与满额优惠叠加；⑤ 计次票与满额优惠不可叠加，图表按两者取更优绘制；⑥ 官方票价与公布区段表可能存在个别不一致，详见选站页高亮提示。</footer>
+<footer>说明：① 票价严格按附件1口径；② 适用范围为全市轨道交通（不含磁浮线、金山铁路、市域机场线及以后开通的市域线）；③ 里程为数据源站间距累加，官方计费口径含车站体等附加空间，可用校准系数模拟；④ 公交换乘优惠：120分钟内换乘减1元，可与满额优惠叠加；⑤ 计次票与满额优惠不可叠加；⑥ 官方票价与公布区段表可能存在个别不一致，详见选站页高亮提示。<br><span id="integrity" style="color:#fde047;font-weight:600;">（完整性校验中…若本行未变为"V1.21 · 脚本完整加载 ✔"，说明文件保存不完整，请重新完整复制本代码，务必以 &lt;/html&gt; 结尾）</span></footer>
 <script>
-function fareCurrent(d){ if(d<=0)return 0; if(d<=6)return 3; return 3+Math.ceil((d-6)/10); }
-function fareP1(d){ if(d<=0)return 0; const s=[4,4,4,7,7,7,10,10,10]; let x=4,p=3; if(d<=x)return p; for(const k of s){x+=k;p++;if(d<=x)return p;} return p+Math.ceil((d-67)/15); }
-function fareP2(d){ if(d<=0)return 0; const s=[6,8,8,10,10,12,12]; let x=6,p=4; if(d<=x)return p; for(const k of s){x+=k;p++;if(d<=x)return p;} return p+Math.ceil((d-72)/14); }
-const SEGMENTS=[
- {line:'1号线',stations:[['莘庄',0],['外环路',1303],['莲花路',2762],['锦江乐园',4395],['上海南站',6484],['漕宝路',8145],['上海体育馆',9679],['徐家汇',10957],['衡山路',12430],['常熟路',13586],['陕西南路',14525],['一大会址·黄陂南路',15932],['人民广场',17490],['新闸路',18410],['汉中路',19385],['上海火车站',20184],['中山北路',21555],['延长路',23037],['上海马戏城',24033],['汶水路',25466],['彭浦新村',27029],['共康路',28426],['通河新村',29851],['呼兰路',30881],['共富新村',32658],['宝安公路',34301],['友谊西路',35615],['富锦路',36889]]},
- {line:'2号线',stations:[['蟠祥路·国家会计学院',0],['国家会展中心',1640],['虹桥火车站',3482],['虹桥2号航站楼',4172],['淞虹路',10092],['北新泾',11459],['威宁路',12719],['娄山关路',14380],['中山公园',15998],['江苏路',17464],['静安寺',18889],['南京西路',20379],['人民广场',21709],['南京东路',22834],['陆家嘴',24668],['浦东南路',26035],['世纪大道',27280],['上海科技馆',29090],['世纪公园',30544],['龙阳路',31644],['张江高科',34585],['金科路',35978],['广兰路',38033],['唐镇',41426],['创新中路',43214],['华夏东路',45314],['川沙',48070],['凌空路',50665],['远东大道',53735],['海天三路',59653],['浦东1号2号航站楼',61940]]},
- {line:'3号线',stations:[['上海南站',0],['石龙路',1314],['龙漕路',2798],['漕溪路',3823],['宜山路',5361],['虹桥路',6670],['延安西路',8131],['中山公园',9232],['金沙江路',10739],['曹杨路',11642],['镇坪路',13015],['中潭路',14488],['上海火车站',16215],['宝山路',18232],['东宝兴路',19305],['虹口足球场',20616],['赤峰路',21766],['大柏树',22677],['江湾镇',24477],['殷高西路',26080],['长江南路',27595],['淞发路',29285],['张华浜',30798],['淞滨路',32338],['水产路',33579],['宝杨路',35334],['友谊路',36363],['铁力路',38067],['江杨北路',40148]]},
- {line:'4号线',ring:true,closeDist:1144,stations:[['宜山路',0],['虹桥路',1323],['延安西路',2784],['中山公园',3885],['金沙江路',5392],['曹杨路',6295],['镇坪路',7668],['中潭路',9141],['上海火车站',10868],['宝山路',12885],['海伦路',14428],['临平路',15492],['大连路',16692],['杨树浦路',17514],['浦东大道',18883],['世纪大道',20349],['向城路',21256],['蓝村路',22578],['塘桥',23730],['南浦大桥',25893],['西藏南路',27101],['鲁班路',28503],['大木桥路',29815],['东安路',30698],['上海体育场',31918],['上海体育馆',32603]]},
- {line:'5号线',stations:[['莘庄',0],['春申路',1588],['银都路',2663],['颛桥',5420],['北桥',7971],['剑川路',10147],['东川路',11116],['江川路',12603],['西渡',14599],['萧塘',17346],['奉浦大道',20087],['环城东路',22429],['望园路',24328],['金海湖',25544],['奉贤新城',27198]]},
- {line:'5号线',stations:[['东川路',11116],['金平路',12139],['华宁路',13396],['文井路',14801],['闵行开发区',16108]]},
- {line:'6号线',stations:[['港城路',0],['外高桥保税区北',1621],['航津路',3156],['外高桥保税区南',4862],['洲海路',6900],['五洲大道',7975],['东靖路',9294],['巨峰路',10404],['五莲路',11365],['博兴路',12311],['金桥路',13167],['云山路',14323],['德平路',15305],['北洋泾路',16635],['民生路',17552],['源深体育中心',18459],['世纪大道',19349],['浦电路',20386],['蓝村路',21351],['上海儿童医学中心',22403],['临沂新村',23689],['高科西路',24861],['东明路',26315],['高青路',27825],['华夏西路',29244],['上南路',30037],['灵岩南路',31130],['东方体育中心',32657]]},
- {line:'7号线',stations:[['美兰湖',0],['罗南新村',1347],['潘广路',4177],['刘行',5157],['顾村公园',6857],['祁华路',9566],['上海大学',11257],['南陈路',12194],['上大路',13537],['场中路',14883],['大场镇',16115],['行知路',17152],['大华三路',18443],['新村路',19558],['岚皋路',20402],['镇坪路',21989],['长寿路',23004],['昌平路',23835],['静安寺',25156],['常熟路',26247],['肇嘉浜路',27932],['东安路',28911],['龙华中路',29639],['后滩',31886],['长清路',33149],['耀华路',34075],['云台路',34778],['高科西路',35851],['杨高南路',37354],['锦绣路',38767],['芳华路',40210],['龙阳路',42050],['花木路',43425]]},
- {line:'8号线',stations:[['市光路',0],['嫩江路',882],['翔殷路',1962],['黄兴公园',3010],['延吉中路',3936],['黄兴路',5209],['江浦路',6258],['鞍山新村',7136],['四平路',7964],['曲阳路',9021],['虹口足球场',10501],['西藏北路',11778],['中兴路',13004],['曲阜路',14239],['人民广场',15320],['大世界',16081],['老西门',17085],['陆家浜路',17910],['西藏南路',19073],['中华艺术宫',21114],['耀华路',21858],['成山路',22806],['杨思',24004],['东方体育中心',25597],['凌兆新村',26917],['芦恒路',29650],['浦江镇',32105],['江月路',33528],['联航路',34578],['沈杜公路',36020]]},
- {line:'9号线',stations:[['上海松江站',0],['醉白池',1795],['松江体育中心',3532],['松江新城',5155],['松江大学城',7757],['洞泾',11138],['佘山',13343],['泗泾',17211],['九亭',23457],['中春路',25720],['七宝',27025],['星中路',28905],['合川路',30761],['漕河泾开发区',32096],['桂林路',34128],['宜山路',35815],['徐家汇',37320],['肇嘉浜路',38709],['嘉善路',39772],['打浦桥',40647],['马当路',41489],['陆家浜路',42434],['小南门',43909],['商城路',46307],['世纪大道',47286],['杨高中路',49721],['芳甸路',50786],['蓝天路',52907],['台儿庄路',55213],['金桥',56758],['金吉路',58455],['金海路',59479],['顾唐路',61190],['民雷路',62315],['曹路',63821]]},
- {line:'10号线',stations:[['虹桥火车站',0],['虹桥2号航站楼',696],['虹桥1号航站楼',2722],['上海动物园',4738],['龙溪路',5982],['水城路',7285],['伊犁路',8452],['宋园路',9252],['虹桥路',10305],['交通大学',11593],['上海图书馆',12738],['陕西南路',14356],['一大会址·新天地',15947],['老西门',16827],['豫园',18228],['南京东路',19425],['天潼路',20097],['四川北路',21070],['海伦路',22014],['邮电新村',23195],['四平路',24175],['同济大学',25149],['国权路',25993],['五角场',27023],['江湾体育场',27652],['三门路',28936],['殷高东路',29926],['新江湾城',30741],['国帆路',32064],['双江路',35601],['高桥西',36573],['高桥',37880],['港城路',39026],['基隆路',40574]]},
- {line:'10号线',stations:[['航中路',0],['紫藤路',1121],['龙柏新村',2407],['龙溪路',5982]]},
- {line:'11号线',stations:[['嘉定北',0],['嘉定西',1944],['白银路',5863],['嘉定新城',7750],['马陆',10646],['陈翔公路',14306],['南翔',16492],['桃浦新村',19729],['武威路',21366],['祁连山路',22644],['李子园',24024],['上海西站',25334],['真如',26912],['枫桥路',28031],['曹杨路',28753],['隆德路',29765],['江苏路',31122],['交通大学',33776],['徐家汇',34681],['上海游泳馆',36445],['龙华',37911],['云锦路',38856],['龙耀路',39790],['东方体育中心',41954],['三林',45470],['三林东',46596],['浦三路',48209],['康恒路',49614],['御桥',51430],['罗山路',53939],['秀沿路',55736],['康新公路',58037],['迪士尼',63111]]},
- {line:'11号线',stations:[['花桥',0],['光明路',1267],['兆丰路',4567],['安亭',5696],['上海汽车城',7507],['昌吉东路',9725],['上海赛车场',15240],['嘉定新城',18327]]},
- {line:'12号线',stations:[['七莘路',0],['虹莘路',1778],['顾戴路',2955],['东兰路',4778],['虹梅路',5788],['虹漕路',6943],['桂林公园',7908],['漕宝路',9192],['龙漕路',10222],['龙华',11346],['龙华中路',12644],['大木桥路',14096],['嘉善路',15070],['陕西南路',16675],['南京西路',18060],['汉中路',19670],['曲阜路',20953],['天潼路',22135],['国际客运中心',23481],['提篮桥',24587],['大连路',25635],['江浦公园',26708],['宁国路',27723],['隆昌路',28805],['爱国路',29765],['复兴岛',30977],['东陆路',32349],['巨峰路',33846],['杨高北路',35043],['金京路',36421],['申江路',38043],['金海路',39481]]},
- {line:'13号线',stations:[['金运路',0],['金沙江西路',1281],['丰庄',3371],['祁连山南路',4580],['真北路',6083],['大渡河路',7286],['金沙江路',8962],['隆德路',10178],['武宁路',11042],['长寿路',12051],['江宁路',12810],['汉中路',14402],['自然博物馆',15028],['南京西路',15915],['淮海中路',16870],['一大会址·新天地',18080],['马当路',18702],['世博会博物馆',20257],['世博大道',21908],['长清路',22964],['成山路',23947],['东明路',25344],['华鹏路',26808],['下南路',28169],['北蔡',29297],['陈春路',30277],['莲溪路',31516],['华夏中路',33105],['中科路',35165],['学林路',36473],['张江路',38030]]},
- {line:'14号线',stations:[['封浜',0],['乐秀路',1721],['临洮路',3348],['嘉怡路',4819],['定边路',6509],['真新新村',7459],['真光路',8603],['铜川路',9871],['真如',10747],['中宁路',11864],['曹杨路',12838],['武宁路',13999],['武定路',14760],['静安寺',15939],['一大会址·黄陂南路',18883],['大世界',19686],['豫园',20636],['陆家嘴',22101],['浦东南路',23171],['浦东大道',23827],['源深路',24999],['昌邑路',25884],['歇浦路',27231],['龙居路（暂未启用）',28170],['云山路',30053],['蓝天路',31324],['黄杨路',33241],['云顺路',34190],['浦东足球场',35714],['金粤路',37029],['桂桥路',38199]]},
- {line:'15号线',stations:[['紫竹高新区',0],['永德路',1849],['元江路',4705],['双柏路',7172],['曙建路',8095],['景西路',9285],['虹梅南路',10729],['景洪路',12422],['朱梅路',13636],['罗秀路',14502],['华东理工大学',16052],['上海南站',17676],['桂林公园',19504],['桂林路',20366],['吴中路',21388],['姚虹路',22663],['红宝石路',24060],['娄山关路',25667],['长风公园',27154],['大渡河路',27938],['梅岭北路',29159],['铜川路',30021],['上海西站',31437],['武威东路',33094],['古浪路',34129],['祁安路',35422],['南大路',36604],['丰翔路',37599],['锦秋路',38927],['顾村公园',41726]]},
- {line:'16号线',stations:[['龙阳路',0],['华夏中路',4355],['罗山路',7031],['周浦东',12008],['鹤沙航城',15617],['航头东',18211],['新场',21871],['野生动物园',26714],['惠南',32752],['惠南东',38508],['书院',49179],['临港大道',56261],['滴水湖',58819]]},
- {line:'17号线',stations:[['虹桥火车站',0],['国家会展中心',2523],['蟠龙路',4023],['徐盈路',6559],['徐泾北城',7767],['嘉松中路',10007],['赵巷',13064],['汇金路',16944],['青浦新城',19459],['漕盈路',22269],['淀山湖大道',26126],['朱家角',31964],['东方绿舟',34771],['西岑',41086]]},
- {line:'18号线',stations:[['航头',0],['下沙',2008],['鹤涛路',4003],['沈梅路',6326],['繁荣路',7875],['周浦',9232],['康桥',11440],['御桥',14470],['莲溪路',15811],['北中路',17320],['芳芯路',18274],['龙阳路',19398],['迎春路',21673],['杨高中路',22305],['民生路',23234],['昌邑路',24423],['丹阳路',25857],['平凉路',26605],['江浦公园',27313],['江浦路',28432],['抚顺路',29504],['国权路',30319],['复旦大学',31740],['上海财经大学',33086],['殷高路',34622],['长江南路',36108],['通南路',37296],['长江西路',38260],['江杨南路（暂未开通）',39511],['爱辉路',41280],['呼兰路',42646],['康文路',44220]]},
- {line:'浦江线',stations:[['沈杜公路',0],['三鲁公路',1972],['闵瑞路',2985],['浦航路',3761],['东城一路',4942],['汇臻路',6294]]}
+function fareCurrent(d){if(d<=0)return 0;if(d<=6)return 3;return 3+Math.ceil((d-6)/10);}
+function fareP1(d){if(d<=0)return 0;var s=[4,4,4,7,7,7,10,10,10],x=4,p=3;if(d<=x)return p;for(var i=0;i<s.length;i++){x+=s[i];p++;if(d<=x)return p;}return p+Math.ceil((d-67)/15);}
+function fareP2(d){if(d<=0)return 0;var s=[6,8,8,10,10,12,12],x=6,p=4;if(d<=x)return p;for(var i=0;i<s.length;i++){x+=s[i];p++;if(d<=x)return p;}return p+Math.ceil((d-72)/14);}
+var SEGMENTS=[
+{l:'1号线',s:[['莘庄',0],['外环路',1303],['莲花路',2762],['锦江乐园',4395],['上海南站',6484],['漕宝路',8145],['上海体育馆',9679],['徐家汇',10957],['衡山路',12430],['常熟路',13586],['陕西南路',14525],['一大会址·黄陂南路',15932],['人民广场',17490],['新闸路',18410],['汉中路',19385],['上海火车站',20184],['中山北路',21555],['延长路',23037],['上海马戏城',24033],['汶水路',25466],['彭浦新村',27029],['共康路',28426],['通河新村',29851],['呼兰路',30881],['共富新村',32658],['宝安公路',34301],['友谊西路',35615],['富锦路',36889]]},
+{l:'2号线',s:[['蟠祥路·国家会计学院',0],['国家会展中心',1640],['虹桥火车站',3482],['虹桥2号航站楼',4172],['淞虹路',10092],['北新泾',11459],['威宁路',12719],['娄山关路',14380],['中山公园',15998],['江苏路',17464],['静安寺',18889],['南京西路',20379],['人民广场',21709],['南京东路',22834],['陆家嘴',24668],['浦东南路',26035],['世纪大道',27280],['上海科技馆',29090],['世纪公园',30544],['龙阳路',31644],['张江高科',34585],['金科路',35978],['广兰路',38033],['唐镇',41426],['创新中路',43214],['华夏东路',45314],['川沙',48070],['凌空路',50665],['远东大道',53735],['海天三路',59653],['浦东1号2号航站楼',61940]]},
+{l:'3号线',s:[['上海南站',0],['石龙路',1314],['龙漕路',2798],['漕溪路',3823],['宜山路',5361],['虹桥路',6670],['延安西路',8131],['中山公园',9232],['金沙江路',10739],['曹杨路',11642],['镇坪路',13015],['中潭路',14488],['上海火车站',16215],['宝山路',18232],['东宝兴路',19305],['虹口足球场',20616],['赤峰路',21766],['大柏树',22677],['江湾镇',24477],['殷高西路',26080],['长江南路',27595],['淞发路',29285],['张华浜',30798],['淞滨路',32338],['水产路',33579],['宝杨路',35334],['友谊路',36363],['铁力路',38067],['江杨北路',40148]]},
+{l:'4号线',ring:1,cd:1144,s:[['宜山路',0],['虹桥路',1323],['延安西路',2784],['中山公园',3885],['金沙江路',5392],['曹杨路',6295],['镇坪路',7668],['中潭路',9141],['上海火车站',10868],['宝山路',12885],['海伦路',14428],['临平路',15492],['大连路',16692],['杨树浦路',17514],['浦东大道',18883],['世纪大道',20349],['向城路',21256],['蓝村路',22578],['塘桥',23730],['南浦大桥',25893],['西藏南路',27101],['鲁班路',28503],['大木桥路',29815],['东安路',30698],['上海体育场',31918],['上海体育馆',32603]]},
+{l:'5号线',s:[['莘庄',0],['春申路',1588],['银都路',2663],['颛桥',5420],['北桥',7971],['剑川路',10147],['东川路',11116],['江川路',12603],['西渡',14599],['萧塘',17346],['奉浦大道',20087],['环城东路',22429],['望园路',24328],['金海湖',25544],['奉贤新城',27198]]},
+{l:'5号线',s:[['东川路',11116],['金平路',12139],['华宁路',13396],['文井路',14801],['闵行开发区',16108]]},
+{l:'6号线',s:[['港城路',0],['外高桥保税区北',1621],['航津路',3156],['外高桥保税区南',4862],['洲海路',6900],['五洲大道',7975],['东靖路',9294],['巨峰路',10404],['五莲路',11365],['博兴路',12311],['金桥路',13167],['云山路',14323],['德平路',15305],['北洋泾路',16635],['民生路',17552],['源深体育中心',18459],['世纪大道',19349],['浦电路',20386],['蓝村路',21351],['上海儿童医学中心',22403],['临沂新村',23689],['高科西路',24861],['东明路',26315],['高青路',27825],['华夏西路',29244],['上南路',30037],['灵岩南路',31130],['东方体育中心',32657]]},
+{l:'7号线',s:[['美兰湖',0],['罗南新村',1347],['潘广路',4177],['刘行',5157],['顾村公园',6857],['祁华路',9566],['上海大学',11257],['南陈路',12194],['上大路',13537],['场中路',14883],['大场镇',16115],['行知路',17152],['大华三路',18443],['新村路',19558],['岚皋路',20402],['镇坪路',21989],['长寿路',23004],['昌平路',23835],['静安寺',25156],['常熟路',26247],['肇嘉浜路',27932],['东安路',28911],['龙华中路',29639],['后滩',31886],['长清路',33149],['耀华路',34075],['云台路',34778],['高科西路',35851],['杨高南路',37354],['锦绣路',38767],['芳华路',40210],['龙阳路',42050],['花木路',43425]]},
+{l:'8号线',s:[['市光路',0],['嫩江路',882],['翔殷路',1962],['黄兴公园',3010],['延吉中路',3936],['黄兴路',5209],['江浦路',6258],['鞍山新村',7136],['四平路',7964],['曲阳路',9021],['虹口足球场',10501],['西藏北路',11778],['中兴路',13004],['曲阜路',14239],['人民广场',15320],['大世界',16081],['老西门',17085],['陆家浜路',17910],['西藏南路',19073],['中华艺术宫',21114],['耀华路',21858],['成山路',22806],['杨思',24004],['东方体育中心',25597],['凌兆新村',26917],['芦恒路',29650],['浦江镇',32105],['江月路',33528],['联航路',34578],['沈杜公路',36020]]},
+{l:'9号线',s:[['上海松江站',0],['醉白池',1795],['松江体育中心',3532],['松江新城',5155],['松江大学城',7757],['洞泾',11138],['佘山',13343],['泗泾',17211],['九亭',23457],['中春路',25720],['七宝',27025],['星中路',28905],['合川路',30761],['漕河泾开发区',32096],['桂林路',34128],['宜山路',35815],['徐家汇',37320],['肇嘉浜路',38709],['嘉善路',39772],['打浦桥',40647],['马当路',41489],['陆家浜路',42434],['小南门',43909],['商城路',46307],['世纪大道',47286],['杨高中路',49721],['芳甸路',50786],['蓝天路',52907],['台儿庄路',55213],['金桥',56758],['金吉路',58455],['金海路',59479],['顾唐路',61190],['民雷路',62315],['曹路',63821]]},
+{l:'10号线',s:[['虹桥火车站',0],['虹桥2号航站楼',696],['虹桥1号航站楼',2722],['上海动物园',4738],['龙溪路',5982],['水城路',7285],['伊犁路',8452],['宋园路',9252],['虹桥路',10305],['交通大学',11593],['上海图书馆',12738],['陕西南路',14356],['一大会址·新天地',15947],['老西门',16827],['豫园',18228],['南京东路',19425],['天潼路',20097],['四川北路',21070],['海伦路',22014],['邮电新村',23195],['四平路',24175],['同济大学',25149],['国权路',25993],['五角场',27023],['江湾体育场',27652],['三门路',28936],['殷高东路',29926],['新江湾城',30741],['国帆路',32064],['双江路',35601],['高桥西',36573],['高桥',37880],['港城路',39026],['基隆路',40574]]},
+{l:'10号线',s:[['航中路',0],['紫藤路',1121],['龙柏新村',2407],['龙溪路',5982]]},
+{l:'11号线',s:[['嘉定北',0],['嘉定西',1944],['白银路',5863],['嘉定新城',7750],['马陆',10646],['陈翔公路',14306],['南翔',16492],['桃浦新村',19729],['武威路',21366],['祁连山路',22644],['李子园',24024],['上海西站',25334],['真如',26912],['枫桥路',28031],['曹杨路',28753],['隆德路',29765],['江苏路',31122],['交通大学',33776],['徐家汇',34681],['上海游泳馆',36445],['龙华',37911],['云锦路',38856],['龙耀路',39790],['东方体育中心',41954],['三林',45470],['三林东',46596],['浦三路',48209],['康恒路',49614],['御桥',51430],['罗山路',53939],['秀沿路',55736],['康新公路',58037],['迪士尼',63111]]},
+{l:'11号线',s:[['花桥',0],['光明路',1267],['兆丰路',4567],['安亭',5696],['上海汽车城',7507],['昌吉东路',9725],['上海赛车场',15240],['嘉定新城',18327]]},
+{l:'12号线',s:[['七莘路',0],['虹莘路',1778],['顾戴路',2955],['东兰路',4778],['虹梅路',5788],['虹漕路',6943],['桂林公园',7908],['漕宝路',9192],['龙漕路',10222],['龙华',11346],['龙华中路',12644],['大木桥路',14096],['嘉善路',15070],['陕西南路',16675],['南京西路',18060],['汉中路',19670],['曲阜路',20953],['天潼路',22135],['国际客运中心',23481],['提篮桥',24587],['大连路',25635],['江浦公园',26708],['宁国路',27723],['隆昌路',28805],['爱国路',29765],['复兴岛',30977],['东陆路',32349],['巨峰路',33846],['杨高北路',35043],['金京路',36421],['申江路',38043],['金海路',39481]]},
+{l:'13号线',s:[['金运路',0],['金沙江西路',1281],['丰庄',3371],['祁连山南路',4580],['真北路',6083],['大渡河路',7286],['金沙江路',8962],['隆德路',10178],['武宁路',11042],['长寿路',12051],['江宁路',12810],['汉中路',14402],['自然博物馆',15028],['南京西路',15915],['淮海中路',16870],['一大会址·新天地',18080],['马当路',18702],['世博会博物馆',20257],['世博大道',21908],['长清路',22964],['成山路',23947],['东明路',25344],['华鹏路',26808],['下南路',28169],['北蔡',29297],['陈春路',30277],['莲溪路',31516],['华夏中路',33105],['中科路',35165],['学林路',36473],['张江路',38030]]},
+{l:'14号线',s:[['封浜',0],['乐秀路',1721],['临洮路',3348],['嘉怡路',4819],['定边路',6509],['真新新村',7459],['真光路',8603],['铜川路',9871],['真如',10747],['中宁路',11864],['曹杨路',12838],['武宁路',13999],['武定路',14760],['静安寺',15939],['一大会址·黄陂南路',18883],['大世界',19686],['豫园',20636],['陆家嘴',22101],['浦东南路',23171],['浦东大道',23827],['源深路',24999],['昌邑路',25884],['歇浦路',27231],['龙居路（暂未启用）',28170],['云山路',30053],['蓝天路',31324],['黄杨路',33241],['云顺路',34190],['浦东足球场',35714],['金粤路',37029],['桂桥路',38199]]},
+{l:'15号线',s:[['紫竹高新区',0],['永德路',1849],['元江路',4705],['双柏路',7172],['曙建路',8095],['景西路',9285],['虹梅南路',10729],['景洪路',12422],['朱梅路',13636],['罗秀路',14502],['华东理工大学',16052],['上海南站',17676],['桂林公园',19504],['桂林路',20366],['吴中路',21388],['姚虹路',22663],['红宝石路',24060],['娄山关路',25667],['长风公园',27154],['大渡河路',27938],['梅岭北路',29159],['铜川路',30021],['上海西站',31437],['武威东路',33094],['古浪路',34129],['祁安路',35422],['南大路',36604],['丰翔路',37599],['锦秋路',38927],['顾村公园',41726]]},
+{l:'16号线',s:[['龙阳路',0],['华夏中路',4355],['罗山路',7031],['周浦东',12008],['鹤沙航城',15617],['航头东',18211],['新场',21871],['野生动物园',26714],['惠南',32752],['惠南东',38508],['书院',49179],['临港大道',56261],['滴水湖',58819]]},
+{l:'17号线',s:[['虹桥火车站',0],['国家会展中心',2523],['蟠龙路',4023],['徐盈路',6559],['徐泾北城',7767],['嘉松中路',10007],['赵巷',13064],['汇金路',16944],['青浦新城',19459],['漕盈路',22269],['淀山湖大道',26126],['朱家角',31964],['东方绿舟',34771],['西岑',41086]]},
+{l:'18号线',s:[['航头',0],['下沙',2008],['鹤涛路',4003],['沈梅路',6326],['繁荣路',7875],['周浦',9232],['康桥',11440],['御桥',14470],['莲溪路',15811],['北中路',17320],['芳芯路',18274],['龙阳路',19398],['迎春路',21673],['杨高中路',22305],['民生路',23234],['昌邑路',24423],['丹阳路',25857],['平凉路',26605],['江浦公园',27313],['江浦路',28432],['抚顺路',29504],['国权路',30319],['复旦大学',31740],['上海财经大学',33086],['殷高路',34622],['长江南路',36108],['通南路',37296],['长江西路',38260],['江杨南路（暂未开通）',39511],['爱辉路',41280],['呼兰路',42646],['康文路',44220]]},
+{l:'浦江线',s:[['沈杜公路',0],['三鲁公路',1972],['闵瑞路',2985],['浦航路',3761],['东城一路',4942],['汇臻路',6294]]}
 ];
-const LINE_COLORS={'1号线':'#E4002B','2号线':'#8FC31F','3号线':'#FFD100','4号线':'#5F259F','5号线':'#B41E91','6号线':'#C6168D','7号线':'#F37021','8号线':'#00A3E0','9号线':'#71C5E8','10号线':'#BFA8D8','11号线':'#A32035','12号线':'#007A60','13号线':'#E91195','14号线':'#727D13','15号线':'#D6A461','16号线':'#2BB673','17号线':'#C28840','18号线':'#8C6A45','浦江线':'#8A9BA8'};
-const adj={};
-SEGMENTS.forEach(seg=>{const s=seg.stations;
- for(let i=1;i<s.length;i++){const a=s[i-1],b=s[i],w=Math.abs(b[1]-a[1]);if(w<=0)continue;
-  (adj[a[0]]=adj[a[0]]||[]).push({to:b[0],w,line:seg.line});(adj[b[0]]=adj[b[0]]||[]).push({to:a[0],w,line:seg.line});}
- if(seg.ring&&s.length>2){const f=s[0],l=s[s.length-1],w=seg.closeDist||1000;
-  (adj[l[0]]=adj[l[0]]||[]).push({to:f[0],w,line:seg.line});(adj[f[0]]=adj[f[0]]||[]).push({to:l[0],w,line:seg.line});}});
-function shortest(a,b){ if(a===b)return{d:0,edges:[]};
- const dist={},vis={},pq=[[0,a]],prev={};dist[a]=0;
- while(pq.length){pq.sort((x,y)=>x[0]-y[0]);const[d,u]=pq.shift();if(vis[u])continue;vis[u]=true;if(u===b)break;
-  (adj[u]||[]).forEach(e=>{const nd=d+e.w;if(nd<(dist[e.to]??Infinity)){dist[e.to]=nd;prev[e.to]={from:u,line:e.line,w:e.w};pq.push([nd,e.to]);}});}
+var LINE_COLORS={'1号线':'#E4002B','2号线':'#8FC31F','3号线':'#FFD100','4号线':'#5F259F','5号线':'#B41E91','6号线':'#C6168D','7号线':'#F37021','8号线':'#00A3E0','9号线':'#71C5E8','10号线':'#BFA8D8','11号线':'#A32035','12号线':'#007A60','13号线':'#E91195','14号线':'#727D13','15号线':'#D6A461','16号线':'#2BB673','17号线':'#C28840','18号线':'#8C6A45','浦江线':'#8A9BA8'};
+var adj={};
+SEGMENTS.forEach(function(seg){var st=seg.s;
+ for(var i=1;i<st.length;i++){var a=st[i-1],b=st[i],w=Math.abs(b[1]-a[1]);if(w<=0)continue;
+  (adj[a[0]]=adj[a[0]]||[]).push({to:b[0],w:w});(adj[b[0]]=adj[b[0]]||[]).push({to:a[0],w:w});}
+ if(seg.ring&&st.length>2){var f=st[0],l=st[st.length-1],w2=seg.cd||1000;
+  (adj[l[0]]=adj[l[0]]||[]).push({to:f[0],w:w2});(adj[f[0]]=adj[f[0]]||[]).push({to:l[0],w:w2});}});
+function shortest(a,b){if(a===b)return{d:0,edges:[]};
+ var dist={},vis={},pq=[[0,a]],prev={};dist[a]=0;
+ while(pq.length){pq.sort(function(x,y){return x[0]-y[0];});var t=pq.shift(),d=t[0],u=t[1];if(vis[u])continue;vis[u]=true;if(u===b)break;
+  (adj[u]||[]).forEach(function(e){var nd=d+e.w;if(nd<(dist[e.to]===undefined?Infinity:dist[e.to])){dist[e.to]=nd;prev[e.to]={from:u,w:e.w};pq.push([nd,e.to]);}});}
  if(!(b in dist))return null;
- const edges=[];let c=b;while(c!==a){const p=prev[c];edges.unshift({from:p.from,to:c,w:p.w,line:p.line});c=p.from;}
- return{d:dist[b],edges};}
-function buildLegs(edges){const legs=[];edges.forEach(e=>{const l=legs[legs.length-1];
+ var edges=[],c=b;while(c!==a){var p=prev[c];edges.unshift({from:p.from,to:c,w:p.w});c=p.from;}
+ return{d:dist[b],edges:edges};}
+function buildLegs(edges){var legs=[];edges.forEach(function(e){var l=legs[legs.length-1];
  if(l&&l.line===e.line){l.to=e.to;l.w+=e.w;l.n++;}else legs.push({line:e.line,from:e.from,to:e.to,w:e.w,n:1});});return legs;}
-const TABLE=[['0-4',3,3,4],['4-6',3,4,4],['6-8',4,4,5],['8-12',4,5,5],['12-16',4,6,6],['16-20',5,7,6],['20-23',5,7,7],['23-26',5,8,7],['26-28',6,8,7],['28-30',6,8,8],['30-36',6,9,8],['36-37',7,9,8],['37-38',7,10,8],['38-46',7,10,9],['46-47',8,10,9],['47-48',8,11,9],['48-56',8,11,10],['56-57',9,11,10],['57-60',9,12,10],['60-66',9,12,11],['66-67',10,12,11],['67-72',10,13,11],['72-76',10,13,12],['76-82',11,13,12],['82-86',11,14,12],['86-96',12,14,13],['96-97',13,14,13],['97-100',13,15,13],['100-106',13,15,14],['106-112',14,15,14],['112-114',14,16,14],['114-116',14,16,15],['116-124',15,16,15]];
-function findRange(d){for(const r of TABLE){const[lo,hi]=r[0].split('-').map(Number);if(d>=lo&&d<=hi)return r[0];}return '—';}
-const PY_OVERRIDE={'长':'c','行':'x','乐':'l','陂':'p','重':'c'};
-const PY_BOUNDS=[['a','阿'],['b','八'],['c','擦'],['d','搭'],['e','蛾'],['f','发'],['g','噶'],['h','哈'],['j','击'],['k','喀'],['l','垃'],['m','妈'],['n','拿'],['o','哦'],['p','啪'],['q','期'],['r','然'],['s','撒'],['t','塌'],['w','挖'],['x','昔'],['y','压'],['z','匝']];
-function charInitial(ch){if(PY_OVERRIDE[ch])return PY_OVERRIDE[ch];for(let i=PY_BOUNDS.length-1;i>=0;i--){if(ch.localeCompare(PY_BOUNDS[i][1],'zh-CN')>=0)return PY_BOUNDS[i][0];}return '';}
-function buildPyKey(n){let s='';for(const ch of n){if(/[a-zA-Z0-9]/.test(ch))s+=ch.toLowerCase();else if(/[\u4e00-\u9fa5]/.test(ch))s+=charInitial(ch);}return s;}
-function getLineNames(){const s=new Set(),r=[];SEGMENTS.forEach(x=>{if(!s.has(x.line)){s.add(x.line);r.push(x.line);}});return r;}
-function getStationsByLine(line){const s=new Set(),r=[];SEGMENTS.filter(x=>x.line===line).forEach(seg=>seg.stations.forEach(st=>{if(!s.has(st[0])){s.add(st[0]);r.push(st[0]);}}));return r;}
+var TABLE=[['0-4',3,3,4],['4-6',3,4,4],['6-8',4,4,5],['8-12',4,5,5],['12-16',4,6,6],['16-20',5,7,6],['20-23',5,7,7],['23-26',5,8,7],['26-28',6,8,7],['28-30',6,8,8],['30-36',6,9,8],['36-37',7,9,8],['37-38',7,10,8],['38-46',7,10,9],['46-47',8,10,9],['47-48',8,11,9],['48-56',8,11,10],['56-57',9,11,10],['57-60',9,12,10],['60-66',9,12,11],['66-67',10,12,11],['67-72',10,13,11],['72-76',10,13,12],['76-82',11,13,12],['82-86',11,14,12],['86-96',12,14,13],['96-97',13,14,13],['97-100',13,15,13],['100-106',13,15,14],['106-112',14,15,14],['112-114',14,16,14],['114-116',14,16,15],['116-124',15,16,15]];
+function findRange(d){for(var i=0;i<TABLE.length;i++){var p=TABLE[i][0].split('-');if(d>=+p[0]&&d<=+p[1])return TABLE[i][0];}return '—';}
+var PY_OVERRIDE={'长':'c','行':'x','乐':'l','陂':'p','重':'c'};
+var PY_BOUNDS=[['a','阿'],['b','八'],['c','擦'],['d','搭'],['e','蛾'],['f','发'],['g','噶'],['h','哈'],['j','击'],['k','喀'],['l','垃'],['m','妈'],['n','拿'],['o','哦'],['p','啪'],['q','期'],['r','然'],['s','撒'],['t','塌'],['w','挖'],['x','昔'],['y','压'],['z','匝']];
+function charInitial(ch){if(PY_OVERRIDE[ch])return PY_OVERRIDE[ch];for(var i=PY_BOUNDS.length-1;i>=0;i--){if(ch.localeCompare(PY_BOUNDS[i][1],'zh-CN')>=0)return PY_BOUNDS[i][0];}return '';}
+function buildPyKey(n){var s='';for(var i=0;i<n.length;i++){var ch=n[i];if(/[a-zA-Z0-9]/.test(ch))s+=ch.toLowerCase();else if(/[\u4e00-\u9fa5]/.test(ch))s+=charInitial(ch);}return s;}
+function getLineNames(){var s=[],seen={};SEGMENTS.forEach(function(x){if(!seen[x.l]){seen[x.l]=1;s.push(x.l);}});return s;}
+function getStationsByLine(line){var s=[],seen={};SEGMENTS.forEach(function(x){if(x.l===line)x.s.forEach(function(st){if(!seen[st[0]]){seen[st[0]]=1;s.push(st[0]);}});});return s;}
 function setTab(t){document.getElementById('tabStation').classList.toggle('on',t==='station');document.getElementById('tabDist').classList.toggle('on',t==='dist');document.getElementById('panelStation').classList.toggle('hidden',t!=='station');document.getElementById('panelDist').classList.toggle('hidden',t!=='dist');}
-function fillLineOptions(){['A','B'].forEach(w=>{const sel=document.getElementById('line'+w);getLineNames().forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;sel.appendChild(o);});});}
-function fillStations(w){const ls=document.getElementById('line'+w),ss=document.getElementById('stn'+w);ss.innerHTML='';getStationsByLine(ls.value).forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;ss.appendChild(o);});}
-function setStation(w,stn){const seg=SEGMENTS.find(x=>x.stations.some(s=>s[0]===stn));if(!seg)return;document.getElementById('line'+w).value=seg.line;fillStations(w);document.getElementById('stn'+w).value=stn;}
-function swap(){const a=document.getElementById('stnA').value,b=document.getElementById('stnB').value;setStation('A',b);setStation('B',a);compute();}
+function fillLineOptions(){['A','B'].forEach(function(w){var sel=document.getElementById('line'+w);getLineNames().forEach(function(n){var o=document.createElement('option');o.value=n;o.textContent=n;sel.appendChild(o);});});}
+function fillStations(w){var ls=document.getElementById('line'+w),ss=document.getElementById('stn'+w);ss.innerHTML='';getStationsByLine(ls.value).forEach(function(s){var o=document.createElement('option');o.value=s;o.textContent=s;ss.appendChild(o);});}
+function setStation(w,stn){var seg=null;for(var i=0;i<SEGMENTS.length;i++){var x=SEGMENTS[i],hit=false;for(var j=0;j<x.s.length;j++){if(x.s[j][0]===stn){hit=true;break;}}if(hit){seg=x;break;}}if(!seg)return;document.getElementById('line'+w).value=seg.l;fillStations(w);document.getElementById('stn'+w).value=stn;}
+function swap(){var a=document.getElementById('stnA').value,b=document.getElementById('stnB').value;setStation('A',b);setStation('B',a);compute();}
 function loadOD(a,b){setStation('A',a);setStation('B',b);compute();}
-let stationIndex=null,pyMap=null;
-function buildStationIndex(){const m=new Map();SEGMENTS.forEach(seg=>seg.stations.forEach(st=>{if(!m.has(st[0]))m.set(st[0],new Set());m.get(st[0]).add(seg.line);}));return m;}
-const HOT=['人民广场','徐家汇','世纪大道','虹桥火车站','龙阳路','陆家嘴','上海火车站','莘庄','迪士尼','行知路'];
-function renderResults(list,q){const box=document.getElementById('searchResults');
+var stationIndex=null,pyMap=null;
+function buildStationIndex(){var m=new Map();SEGMENTS.forEach(function(seg){seg.s.forEach(function(st){if(!m.has(st[0]))m.set(st[0],new Set());m.get(st[0]).add(seg.l);});});return m;}
+var HOT=['人民广场','徐家汇','世纪大道','虹桥火车站','龙阳路','陆家嘴','上海火车站','莘庄','迪士尼','行知路'];
+function renderResults(list,q){var box=document.getElementById('searchResults');
  if(!list.length){box.innerHTML='<div class="sempty">未找到匹配站点</div>';box.classList.remove('hidden');return;}
- box.innerHTML=list.map(([name,lines])=>{const disp=(q&&/[\u4e00-\u9fa5]/.test(q))?name.split(q).join('<b>'+q+'</b>'):name;
-  const badges=[...lines].map(l=>`<span class="sline" style="background:${LINE_COLORS[l]||'#64748b'}">${l}</span>`).join('');
-  return `<div class="srow"><span class="sname">${disp}</span><span class="spy">${(pyMap.get(name)||'').toUpperCase()}</span><span class="slines">${badges}</span><span class="sbtns"><button class="a" onclick="pickStation('A','${name}')">设为起点</button><button class="b" onclick="pickStation('B','${name}')">设为终点</button></span></div>`;}).join('');
+ box.innerHTML=list.map(function(it){var name=it[0],lines=it[1];var disp=(q&&/[\u4e00-\u9fa5]/.test(q))?name.split(q).join('<b>'+q+'</b>'):name;
+  var badges=Array.from(lines).map(function(l){return '<span class="sline" style="background:'+(LINE_COLORS[l]||'#64748b')+'">'+l+'</span>';}).join('');
+  return '<div class="srow"><span class="sname">'+disp+'</span><span class="spy">'+(pyMap.get(name)||'').toUpperCase()+'</span><span class="slines">'+badges+'</span><span class="sbtns"><button class="a" onclick="pickStation(\'A\',\''+name+'\')">设为起点</button><button class="b" onclick="pickStation(\'B\',\''+name+'\')">设为终点</button></span></div>';}).join('');
  box.classList.remove('hidden');}
-function onSearch(){const qRaw=document.getElementById('searchInput').value.trim();if(!qRaw){renderHot();return;}
- const q=qRaw.toLowerCase(),list=[];
- for(const[name,lines]of stationIndex){let rank=-1;const ni=name.toLowerCase().indexOf(q);
-  if(ni===0)rank=0;else if(ni>0)rank=1;else{const py=pyMap.get(name)||'';const pi=py.indexOf(q);if(pi===0)rank=2;else if(pi>0)rank=3;}
-  if(rank>=0)list.push([name,lines,rank,name.length]);}
- list.sort((x,y)=>(x[2]-y[2])||(x[3]-y[3]));renderResults(list.slice(0,30).map(r=>[r[0],r[1]]),qRaw);}
-function renderHot(){renderResults(HOT.filter(n=>stationIndex.has(n)).map(n=>[n,stationIndex.get(n)]),'');}
+function onSearch(){var qRaw=document.getElementById('searchInput').value.trim();if(!qRaw){renderHot();return;}
+ var q=qRaw.toLowerCase(),list=[];
+ stationIndex.forEach(function(lines,name){var rank=-1,ni=name.toLowerCase().indexOf(q);
+  if(ni===0)rank=0;else if(ni>0)rank=1;else{var py=pyMap.get(name)||'',pi=py.indexOf(q);if(pi===0)rank=2;else if(pi>0)rank=3;}
+  if(rank>=0)list.push([name,lines,rank,name.length]);});
+ list.sort(function(x,y){return (x[2]-y[2])||(x[3]-y[3]);});renderResults(list.slice(0,30).map(function(r){return [r[0],r[1]];}),qRaw);}
+function renderHot(){renderResults(HOT.filter(function(n){return stationIndex.has(n);}).map(function(n){return [n,stationIndex.get(n)];}),'');}
 function onSearchFocus(){if(!document.getElementById('searchInput').value.trim())renderHot();}
 function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchResults').classList.add('hidden');}
 function pickStation(w,name){setStation(w,name);compute();clearSearch();}
-let lastCalc=null,manRides=44,busTransfer=false,calib={factor:101.5},lastRaw=null;
-function maneCost(f,n){if(f<=0||n<=0)return{total:0,avg:0,discRides:0,fullRides:0};
- const full=Math.min(n,Math.ceil(100/f)),disc=n-full,total=full*f+disc*f*0.9;return{total,avg:total/n,discRides:disc,fullRides:full};}
-function bestPassForN(n){const P=[[45,210],[60,270],[90,390]];let best=null;
- for(const[r,p]of P){const k=Math.ceil(n/r),cost=k*p/n;if(!best||cost<best.cost)best={r,p,k,cost};}return best;}
-function bestPerRide(f,n){const base=busTransfer?Math.max(f-1,0):f;
- const a=maneCost(base,n).avg;const b=bestPassForN(n).cost;return Math.min(a,b);}
-function updateMane(){const v=parseFloat(document.getElementById('monthRides').value);manRides=(v>0)?v:0;renderMane();}
+var lastCalc=null,manRides=44,busTransfer=false,calib={factor:101.5},lastRaw=null;
+function maneCost(f,n){if(f<=0||n<=0)return{total:0,avg:0};var full=Math.min(n,Math.ceil(100/f)),disc=n-full,total=full*f+disc*f*0.9;return{total:total,avg:total/n,discRides:disc,fullRides:full};}
+function bestPassForN(n){var P=[[45,210],[60,270],[90,390]],best=null;for(var i=0;i<P.length;i++){var r=P[i][0],p=P[i][1],k=Math.ceil(n/r),cost=k*p/n;if(!best||cost<best.cost)best={r:r,p:p,k:k,cost:cost};}return best;}
+function updateMane(){var v=parseFloat(document.getElementById('monthRides').value);manRides=(v>0)?v:0;renderMane();}
 function updateBus(){busTransfer=document.getElementById('busChk').checked;renderMane();}
 function updateCalib(){calib.factor=Math.max(50,Math.min(200,parseFloat(document.getElementById('calibFactor').value)||100));if(lastRaw)render(lastRaw.d,lastRaw.title,lastRaw.tag,lastRaw.edges);}
 function stepFactor(d){calib.factor=Math.max(50,Math.min(200,Math.round((calib.factor+d)*10)/10));if(lastRaw)render(lastRaw.d,lastRaw.title,lastRaw.tag,lastRaw.edges);}
-function renderMane(){const box=document.getElementById('maneBox');if(!box)return;
+function renderMane(){var box=document.getElementById('maneBox');if(!box)return;
  if(!lastCalc||!(manRides>0)){box.innerHTML='<p class="passhint">请输入每月乘坐次数后查看测算。</p>';renderChart();return;}
- const n=manRides;
- const rows=[['现行',lastCalc.f0],['方案一',lastCalc.f1],['方案二',lastCalc.f2]].map(([label,f])=>{
-  const base=busTransfer?Math.max(f-1,0):f;
-  const m=maneCost(base,n),bp=bestPassForN(n),mb=m.avg<=bp.cost;
-  const ticket=`${bp.k}×${bp.r}次票（${bp.k*bp.p}元）`;
-  const save=mb?`较计次票每次省 ${fmt(bp.cost-m.avg)} 元`:`较满额优惠每次省 ${fmt(m.avg-bp.cost)} 元`;
-  const fareCell=busTransfer?`${f} → ${base} 元`:`${f} 元`;
-  return `<tr><td>${label}</td><td data-label="单次票价">${fareCell}</td><td data-label="优惠后单次">${fmt(m.avg)} 元</td><td data-label="月总支出">${fmt(m.total)} 元</td><td data-label="计次票方案">${ticket}</td><td data-label="计次票单次">${fmt(bp.cost)} 元</td><td data-label="更省方案">${mb?'<span class="same">满额优惠更省</span>':'<span class="up">计次票更省</span>'}<div class="mini">${save}</div></td></tr>`;}).join('');
- const b1=busTransfer?Math.max(lastCalc.f1-1,0):lastCalc.f1;
- const m1=maneCost(b1,n);
- box.innerHTML=`<div class="table-scroll"><table class="m-cards"><thead><tr><th>方案</th><th>单次票价</th><th>优惠后单次</th><th>月总支出</th><th>计次票方案</th><th>计次票单次</th><th>更省方案</th></tr></thead><tbody>${rows}</tbody></table></div>
- <p class="passhint">满额优惠：同一支付渠道每月累计满100元后部分9折；与计次票不可叠加。${busTransfer?'已含公交换乘优惠：每次先减1元，再按满额优惠对超100元部分打9折。':''}以方案一为例：单次 ${b1} 元，前 ${m1.fullRides} 次全价，之后 ${m1.discRides} 次9折。</p>`;
+ var n=manRides;
+ var rows=[['现行',lastCalc.f0],['方案一',lastCalc.f1],['方案二',lastCalc.f2]].map(function(it){var label=it[0],f=it[1];
+  var base=busTransfer?Math.max(f-1,0):f;
+  var m=maneCost(base,n),bp=bestPassForN(n),mb=m.avg<=bp.cost;
+  var ticket=bp.k+'×'+bp.r+'次票（'+(bp.k*bp.p)+'元）';
+  var save=mb?('较计次票每次省 '+fmt(bp.cost-m.avg)+' 元'):('较满额优惠每次省 '+fmt(m.avg-bp.cost)+' 元');
+  var fareCell=busTransfer?(f+' → '+base+' 元'):(f+' 元');
+  return '<tr><td>'+label+'</td><td data-label="单次票价">'+fareCell+'</td><td data-label="优惠后单次">'+fmt(m.avg)+' 元</td><td data-label="月总支出">'+fmt(m.total)+' 元</td><td data-label="计次票方案">'+ticket+'</td><td data-label="计次票单次">'+fmt(bp.cost)+' 元</td><td data-label="更省方案">'+(mb?'<span class="same">满额优惠更省</span>':'<span class="up">计次票更省</span>')+'<div class="mini">'+save+'</div></td></tr>';}).join('');
+ var b1=busTransfer?Math.max(lastCalc.f1-1,0):lastCalc.f1;
+ var m1=maneCost(b1,n);
+ box.innerHTML='<div class="table-scroll"><table class="m-cards"><thead><tr><th>方案</th><th>单次票价</th><th>优惠后单次</th><th>月总支出</th><th>计次票方案</th><th>计次票单次</th><th>更省方案</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+ '<p class="passhint">满额优惠：同一支付渠道每月累计满100元后部分9折；与计次票不可叠加。'+(busTransfer?'已含公交换乘优惠：每次先减1元，再按满额优惠对超100元部分打9折。':'')+'以方案一为例：单次 '+b1+' 元，前 '+m1.fullRides+' 次全价，之后 '+m1.discRides+' 次9折。</p>';
  renderChart();}
-/* ===== 优惠比价折线图 ===== */
 function renderChart(){
- const box=document.getElementById('chartBox'),adv=document.getElementById('chartAdvice');
+ var box=document.getElementById('chartBox'),adv=document.getElementById('chartAdvice'),leg=document.getElementById('chartLegend');
  if(!box||!lastCalc)return;
- const n=Math.min(Math.max(manRides>0?manRides:44,1),90);
- const fares=[['现行',lastCalc.f0,'#64748b'],['方案一',lastCalc.f1,'#1d4ed8'],['方案二',lastCalc.f2,'#d97706']];
- const W=680,H=340,L=46,R=12,T=18,B=44,nMax=90;
- const yMax=Math.ceil(Math.max(lastCalc.f0,lastCalc.f1,lastCalc.f2))+1;
- const X=v=>L+(v-1)/(nMax-1)*(W-L-R);
- const Y=v=>T+(1-v/yMax)*(H-T-B);
- let g='';
- const yStep=yMax>12?4:(yMax>8?2:1);
- for(let v=0;v<=yMax;v+=yStep){
-  g+=`<line x1="${L}" y1="${Y(v)}" x2="${W-R}" y2="${Y(v)}" stroke="#e2e8f0" stroke-width="1"/>`;
-  g+=`<text x="${L-6}" y="${Y(v)+4}" font-size="10" fill="#64748b" text-anchor="end">${v}</text>`;
- }
- for(let v=10;v<=nMax;v+=10){
-  g+=`<line x1="${X(v)}" y1="${T}" x2="${X(v)}" y2="${H-B}" stroke="#f1f5f9" stroke-width="1"/>`;
-  g+=`<text x="${X(v)}" y="${H-B+16}" font-size="10" fill="#64748b" text-anchor="middle">${v}</text>`;
- }
- g+=`<text x="${X(1)}" y="${H-B+16}" font-size="10" fill="#64748b" text-anchor="middle">1</text>`;
- g+=`<text x="${L-6}" y="${T-6}" font-size="10" fill="#64748b" text-anchor="end">元/次</text>`;
- g+=`<text x="${W-R}" y="${H-B+30}" font-size="10" fill="#64748b" text-anchor="end">每月乘坐次数 →</text>`;
- let lines=`<line x1="${X(n)}" y1="${T}" x2="${X(n)}" y2="${H-B}" stroke="#94a3b8" stroke-dasharray="4 3" stroke-width="1"/>`;
- fares.forEach(([name,f,color])=>{
-  const pts=[];
-  for(let i=1;i<=nMax;i++){pts.push(`${X(i).toFixed(1)},${Y(bestPerRide(f,i)).toFixed(1)}`);}
-  lines+=`<polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2"/>`;
-  lines+=`<circle cx="${X(n)}" cy="${Y(bestPerRide(f,n))}" r="4" fill="${color}" stroke="#fff" stroke-width="1.5"/>`;
- });
- let legend='';
- fares.forEach(([name,f,color],i)=>{legend+=`<text x="${L+i*110}" y="${H-6}" font-size="11" fill="${color}">■ ${name}（${f}元）</text>`;});
- box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:10px;">${g}${lines}${legend}</svg>`;
- const opts=fares.map(([name,f,color])=>{
-  const base=busTransfer?Math.max(f-1,0):f;
-  const a=maneCost(base,n).avg,bp=bestPassForN(n);
-  const usePass=bp.cost<=a;
-  return {name,color,a,bp,usePass,best:Math.min(a,bp.cost)};
- });
- const overall=opts.slice().sort((x,y)=>x.best-y.best)[0];
- adv.innerHTML=`💡 最佳优惠建议（按 ${n} 次/月，计次票与满额优惠取更优）：`+
-  opts.map(o=>`${o.name} ≈ <b>${fmt(o.best)} 元/次</b>（${o.usePass?('购 '+o.bp.k+'×'+o.bp.r+' 次票'):'满额优惠'}）`).join('；')+
-  `。综合最划算：<span style="color:${overall.color};font-weight:700">${overall.name}</span>。注：计次票与满额优惠不可叠加；虚线为当前次数。`;
+ var n=Math.min(Math.max(manRides>0?manRides:44,1),90);
+ var fares=[['现行',lastCalc.f0,'#64748b'],['方案一',lastCalc.f1,'#1d4ed8'],['方案二',lastCalc.f2,'#d97706']];
+ var passesDef=[['45次票',45,210,'#059669'],['60次票',60,270,'#7c3aed'],['90次票',90,390,'#0ea5e9']];
+ var W=680,H=360,L=46,R=12,T=18,B=40,nMax=90;
+ var yMax=Math.max(20,Math.ceil(Math.max(lastCalc.f0,lastCalc.f1,lastCalc.f2))+1);
+ var minVal=2;
+ fares.forEach(function(it){var f=it[1],base=busTransfer?Math.max(f-1,0):f;for(var i=1;i<=nMax;i++){minVal=Math.min(minVal,maneCost(base,i).avg);}});
+ var yMin=Math.min(2,Math.floor(minVal));
+ function X(v){return L+(v-1)/(nMax-1)*(W-L-R);}
+ function Y(v){return T+(1-(v-yMin)/(yMax-yMin))*(H-T-B);}
+ var g='',yStep=(yMax-yMin)>24?4:2;
+ for(var v=yMin;v<=yMax;v+=yStep){g+='<line x1="'+L+'" y1="'+Y(v)+'" x2="'+(W-R)+'" y2="'+Y(v)+'" stroke="#e2e8f0" stroke-width="1"/><text x="'+(L-6)+'" y="'+(Y(v)+4)+'" font-size="10" fill="#64748b" text-anchor="end">'+v+'</text>';}
+ for(v=10;v<=nMax;v+=10){g+='<line x1="'+X(v)+'" y1="'+T+'" x2="'+X(v)+'" y2="'+(H-B)+'" stroke="#f1f5f9" stroke-width="1"/><text x="'+X(v)+'" y="'+(H-B+16)+'" font-size="10" fill="#64748b" text-anchor="middle">'+v+'</text>';}
+ g+='<text x="'+X(1)+'" y="'+(H-B+16)+'" font-size="10" fill="#64748b" text-anchor="middle">1</text>';
+ g+='<text x="'+(L-6)+'" y="'+(T-6)+'" font-size="10" fill="#64748b" text-anchor="end">元/次</text>';
+ g+='<text x="'+(W-R)+'" y="'+(H-B+30)+'" font-size="10" fill="#64748b" text-anchor="end">每月乘坐次数 →</text>';
+ var lines='<line x1="'+X(n)+'" y1="'+T+'" x2="'+X(n)+'" y2="'+(H-B)+'" stroke="#94a3b8" stroke-dasharray="4 3" stroke-width="1"/>';
+ fares.forEach(function(it){var f=it[1],c=it[2];lines+='<line x1="'+L+'" y1="'+Y(f)+'" x2="'+(W-R)+'" y2="'+Y(f)+'" stroke="'+c+'" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.5"/>';});
+ fares.forEach(function(it){var f=it[1],c=it[2],base=busTransfer?Math.max(f-1,0):f,pts=[];
+  for(var i=1;i<=nMax;i++){pts.push(X(i).toFixed(1)+','+Y(maneCost(base,i).avg).toFixed(1));}
+  lines+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+c+'" stroke-width="2"/>';
+  lines+='<circle cx="'+X(n)+'" cy="'+Y(maneCost(base,n).avg)+'" r="4" fill="'+c+'" stroke="#fff" stroke-width="1.5"/>';});
+ passesDef.forEach(function(it){var r=it[1],p=it[2],c=it[3],pts=[];
+  for(var i=1;i<=nMax;i++){var vv=Math.ceil(i/r)*p/i;pts.push(X(i).toFixed(1)+','+Y(vv).toFixed(1));}
+  lines+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+c+'" stroke-width="2" stroke-dasharray="2 3"/>';});
+ box.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:10px;"><defs><clipPath id="plotClip"><rect x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'"/></clipPath></defs>'+g+'<g clip-path="url(#plotClip)">'+lines+'</g></svg>';
+ var li='';
+ fares.forEach(function(it){var name=it[0],f=it[1],c=it[2];
+  li+='<span class="lg"><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="'+c+'" stroke-width="2" stroke-dasharray="6 4" opacity="0.5"/></svg>'+name+'基准('+f+'元)</span>';
+  li+='<span class="lg"><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="'+c+'" stroke-width="2"/></svg>'+name+'满额优惠</span>';});
+ passesDef.forEach(function(it){li+='<span class="lg"><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" stroke="'+it[3]+'" stroke-width="2" stroke-dasharray="2 3"/></svg>'+it[0]+'('+it[2]+'元/'+it[1]+'次)</span>';});
+ leg.innerHTML=li;
+ var opts=fares.map(function(it){var name=it[0],f=it[1],c=it[2],base=busTransfer?Math.max(f-1,0):f;
+  var a=maneCost(base,n).avg,bp=bestPassForN(n),usePass=bp.cost<=a;
+  return{name:name,color:c,a:a,bp:bp,usePass:usePass,best:Math.min(a,bp.cost)};});
+ var overall=opts.slice().sort(function(x,y){return x.best-y.best;})[0];
+ adv.innerHTML='💡 最佳优惠建议（按 '+n+' 次/月）：'+opts.map(function(o){return o.name+' 最低 ≈ <b>'+fmt(o.best)+' 元/次</b>（'+(o.usePass?('购 '+o.bp.k+'×'+o.bp.r+' 次票'):'满额优惠')+'）';}).join('；')+'；综合最划算：<span style="color:'+overall.color+';font-weight:700">'+overall.name+'</span>。注：计次票与满额优惠不可叠加；图中各曲线均按实际规则独立绘制（未合并取优），短虚线为无优惠基准，灰色竖虚线为当前次数。';
 }
-function compute(){const a=document.getElementById('stnA').value,b=document.getElementById('stnB').value;if(!a||!b)return;
+function compute(){var a=document.getElementById('stnA').value,b=document.getElementById('stnB').value;if(!a||!b)return;
  if(a===b){render(0,a+' → '+b,'同站',[]);return;}
- const r=shortest(a,b);
+ var r=shortest(a,b);
  if(r===null){document.getElementById('resCard').classList.remove('hidden');document.getElementById('resBody').innerHTML='<p style="color:#dc2626">未找到连通路径</p>';return;}
  render(r.d/1000,a+' → '+b,'按站间实际里程',r.edges);}
-function computeByDist(){const d=parseFloat(document.getElementById('distInput').value);if(!(d>0)){alert('请输入有效里程');return;}render(d,'按里程 '+d+' km','精确对照附件1',null);}
-function fmt(n){return(Math.round(n*100)/100).toString();}
+function computeByDist(){var d=parseFloat(document.getElementById('distInput').value);if(!(d>0)){alert('请输入有效里程');return;}render(d,'按里程 '+d+' km','精确对照附件1',null);}
+function fmt(n){return (Math.round(n*100)/100).toString();}
 function pathHTML(legs){if(!legs||!legs.length)return '';
- const tr=Math.max(legs.length-1,0);let rows='';
- legs.forEach((lg,i)=>{rows+=`<tr><td>${'①②③④⑤'[i]||('['+(i+1)+']')} ${lg.line}：${lg.from} → ${lg.to}</td><td data-label="站数">${lg.n} 个区间</td><td data-label="距离">${fmt(lg.w/1000)} km</td></tr>`;});
- return `<details style="margin-top:16px"><summary>🧭 最短路径明细 <span class="tag">换乘 ${tr} 次 · 共 ${legs.length} 段 · 点击展开</span></summary><div class="table-scroll"><table class="m-cards"><thead><tr><th>乘坐段</th><th>站数</th><th>距离</th></tr></thead><tbody>${rows}</tbody></table></div></details>`;}
+ var tr=Math.max(legs.length-1,0),rows='',num=['①','②','③','④','⑤'];
+ legs.forEach(function(lg,i){rows+='<tr><td>'+(num[i]||('['+(i+1)+']'))+' '+lg.line+'：'+lg.from+' → '+lg.to+'</td><td data-label="站数">'+lg.n+' 个区间</td><td data-label="距离">'+fmt(lg.w/1000)+' km</td></tr>';});
+ return '<details style="margin-top:16px"><summary>🧭 最短路径明细 <span class="tag">换乘 '+tr+' 次 · 共 '+legs.length+' 段 · 点击展开</span></summary><div class="table-scroll"><table class="m-cards"><thead><tr><th>乘坐段</th><th>站数</th><th>距离</th></tr></thead><tbody>'+rows+'</tbody></table></div></details>';}
 function render(d,title,tag,edges){
- lastRaw={d,title,tag,edges};
- const legs=edges?buildLegs(edges):[];
- let dAdj=d*(calib.factor/100);
- const f0=fareCurrent(dAdj),f1=fareP1(dAdj),f2=fareP2(dAdj);
- const max=Math.max(f0,f1,f2,1);
- const u=dAdj>0?[f0/dAdj,f1/dAdj,f2/dAdj]:[0,0,0];
- lastCalc={f0,f1,f2};
- const passes=[{name:'45次票（210元）',cost:210/45,rides:45},{name:'60次票（270元）',cost:270/60,rides:60},{name:'90次票（390元）',cost:390/90,rides:90}];
- const passCell=(c,f)=>{const df=c-f;if(df<0)return `<span class="same">省 ${fmt(-df)} 元/次</span>`;if(df===0)return `<span class="same">持平</span>`;return `<span class="up">贵 ${fmt(df)} 元/次</span>`;};
- const passHtml=passes.map(p=>{const s1=(f1-p.cost)*p.rides,s2=(f2-p.cost)*p.rides;
-  const n1=s1>0?`30日用满约省 ${fmt(s1)} 元`:(s1===0?'30日用满持平':`30日用满约多花 ${fmt(-s1)} 元`);
-  const n2=s2>0?`30日用满约省 ${fmt(s2)} 元`:(s2===0?'30日用满持平':`30日用满约多花 ${fmt(-s2)} 元`);
-  return `<tr><td>${p.name}</td><td data-label="单次成本（用满）">${p.cost.toFixed(2)} 元/次</td><td data-label="较方案一">${passCell(p.cost,f1)}<div class="mini">${n1}</div></td><td data-label="较方案二">${passCell(p.cost,f2)}<div class="mini">${n2}</div></td></tr>`;}).join('');
- const calibNote=(calib.factor!==100)?`<div class="mini" style="margin-top:6px;background:#fef3c7;padding:6px 10px;border-radius:6px;color:#92400e;">⚙️ 校准后计费里程 ${fmt(dAdj)} km（原始 ${fmt(d)} km × ${calib.factor}%）</div>`:'';
+ lastRaw={d:d,title:title,tag:tag,edges:edges};
+ var legs=edges?buildLegs(edges):[];
+ var dAdj=d*(calib.factor/100);
+ var f0=fareCurrent(dAdj),f1=fareP1(dAdj),f2=fareP2(dAdj);
+ var max=Math.max(f0,f1,f2,1);
+ var u=dAdj>0?[f0/dAdj,f1/dAdj,f2/dAdj]:[0,0,0];
+ lastCalc={f0:f0,f1:f1,f2:f2};
+ var passes=[{name:'45次票（210元）',cost:210/45,rides:45},{name:'60次票（270元）',cost:270/60,rides:60},{name:'90次票（390元）',cost:390/90,rides:90}];
+ function passCell(c,f){var df=c-f;if(df<0)return '<span class="same">省 '+fmt(-df)+' 元/次</span>';if(df===0)return '<span class="same">持平</span>';return '<span class="up">贵 '+fmt(df)+' 元/次</span>';}
+ var passHtml=passes.map(function(p){var s1=(f1-p.cost)*p.rides,s2=(f2-p.cost)*p.rides;
+  var n1=s1>0?('30日用满约省 '+fmt(s1)+' 元'):(s1===0?'30日用满持平':('30日用满约多花 '+fmt(-s1)+' 元'));
+  var n2=s2>0?('30日用满约省 '+fmt(s2)+' 元'):(s2===0?'30日用满持平':('30日用满约多花 '+fmt(-s2)+' 元'));
+  return '<tr><td>'+p.name+'</td><td data-label="单次成本（用满）">'+p.cost.toFixed(2)+' 元/次</td><td data-label="较方案一">'+passCell(p.cost,f1)+'<div class="mini">'+n1+'</div></td><td data-label="较方案二">'+passCell(p.cost,f2)+'<div class="mini">'+n2+'</div></td></tr>';}).join('');
+ var calibNote=(calib.factor!==100)?'<div class="mini" style="margin-top:6px;background:#fef3c7;padding:6px 10px;border-radius:6px;color:#92400e;">⚙️ 校准后计费里程 '+fmt(dAdj)+' km（原始 '+fmt(d)+' km × '+calib.factor+'%）</div>':'';
+ var formula=(dAdj<=6)?'3':('3+⌈('+fmt(dAdj)+'−6)/10⌉ = 3+'+Math.ceil((dAdj-6)/10));
  document.getElementById('resCard').classList.remove('hidden');
  document.getElementById('resTag').textContent=tag;
- document.getElementById('resBody').innerHTML=`
-  <div class="route"><span class="od">${title}</span><span class="dist">乘车里程 ${fmt(d)} 公里</span><span class="range">所属乘距档：${findRange(dAdj)} 公里</span></div>
-  <div class="calib">⚙️ 计费口径校准：
-   <label>全网里程系数
-    <button type="button" class="stepbtn" onclick="stepFactor(-0.5)" aria-label="减少0.5">−</button>
-    <input type="number" id="calibFactor" min="50" max="200" step="0.1" value="${calib.factor}" onchange="updateCalib()">
-    <button type="button" class="stepbtn" onclick="stepFactor(0.5)" aria-label="增加0.5">＋</button>
-    %
-   </label>
-  </div>
-  <div class="calib-hint">💡 如现有票价计算与实际情况不符，请用 −/＋ 按钮或手动调整上方全网里程系数（默认 101.5%）以对齐官方App。</div>
-  <div class="cards3">
-   <div class="pcard cur"><div class="pname">现行票价</div><div class="pval">${f0} 元</div><div class="psub" style="color:#64748b">基准（估算）</div></div>
-   <div class="pcard p1"><div class="pname">方案一</div><div class="pval">${f1} 元</div><div class="psub ${f1-f0?'up':'same'}">${f1-f0?'较现行 +'+fmt(f1-f0)+' 元':'持平'}</div></div>
-   <div class="pcard p2"><div class="pname">方案二</div><div class="pval">${f2} 元</div><div class="psub ${f2-f0?'up':'same'}">${f2-f0?'较现行 +'+fmt(f2-f0)+' 元':'持平'}</div></div>
-  </div>
-  ${calibNote}
-  <div class="barwrap">
-   <div class="brow"><span class="bl">现行</span><span class="bt"><i style="width:${f0/max*100}%;background:#94a3b8"></i></span><span class="bv">${f0} 元</span></div>
-   <div class="brow"><span class="bl">方案一</span><span class="bt"><i style="width:${f1/max*100}%;background:#1d4ed8"></i></span><span class="bv">${f1} 元</span></div>
-   <div class="brow"><span class="bl">方案二</span><span class="bt"><i style="width:${f2/max*100}%;background:#d97706"></i></span><span class="bv">${f2} 元</span></div>
-  </div>
-  ${pathHTML(legs)}
-  <p class="passhint">📐 计价代入：计费里程 d=${fmt(dAdj)} km。现行 = ${dAdj<=6?'3':`3+⌈(${fmt(dAdj)}−6)/10⌉ = 3+${Math.ceil((dAdj-6)/10)}`} = <b>${f0} 元</b>；方案一→<b>${f1} 元</b>；方案二→<b>${f2} 元</b>。</p>
-  <div class="table-scroll"><table class="m-keep"><thead><tr><th style="width:28%">项目</th><th>现行</th><th>方案一</th><th>方案二</th></tr></thead><tbody>
-   <tr><td>票价（元）</td><td>${f0}</td><td>${f1}</td><td>${f2}</td></tr>
-   <tr><td>较现行变化</td><td>—</td><td>${f1-f0?'<span class="up">+'+fmt(f1-f0)+'（+'+fmt((f1-f0)/f0*100)+'%）</span>':'持平'}</td><td>${f2-f0?'<span class="up">+'+fmt(f2-f0)+'（+'+fmt((f2-f0)/f0*100)+'%）</span>':'持平'}</td></tr>
-   <tr><td>每人公里单价（元/km）</td><td>${u[0].toFixed(3)}</td><td>${u[1].toFixed(3)}</td><td>${u[2].toFixed(3)}</td></tr>
-  </tbody></table></div>
-  <h2 style="margin-top:16px;font-size:14px">计次票参考 <span class="tag">按新方案票价对比</span></h2>
-  <div class="table-scroll"><table class="m-cards"><thead><tr><th>计次票</th><th>单次成本（用满）</th><th>较方案一（${f1} 元/次）</th><th>较方案二（${f2} 元/次）</th></tr></thead><tbody>${passHtml}</tbody></table></div>
-  <h2 style="margin-top:16px;font-size:14px">满额优惠 / 公交换乘测算 <span class="tag">满100元后9折 · 换乘减1元可叠加</span></h2>
-  <div class="manewrap"><label for="monthRides">每月乘坐次数：</label><input type="number" id="monthRides" min="1" step="1" value="${manRides}" inputmode="numeric" oninput="updateMane()"><span style="color:var(--muted);font-size:12px;">次（默认按工作日往返 44 次/月）</span>
-   <label class="chk"><input type="checkbox" id="busChk" ${busTransfer?'checked':''} onchange="updateBus()"> 公交换乘优惠（120分钟内换乘减1元/次）</label>
-  </div>
-  <div id="maneBox"></div>
-  <h2 style="margin-top:16px;font-size:14px">📈 优惠比价图表 <span class="tag">单次成本随每月次数变化 · 计次票/满额优惠取更优</span></h2>
-  <div id="chartBox"></div>
-  <p class="passhint" id="chartAdvice"></p>`;
+ document.getElementById('resBody').innerHTML=
+  '<div class="route"><span class="od">'+title+'</span><span class="dist">乘车里程 '+fmt(d)+' 公里</span><span class="range">所属乘距档：'+findRange(dAdj)+' 公里</span></div>'+
+  '<div class="calib">⚙️ 计费口径校准：<label>全网里程系数'+
+  '<button type="button" class="stepbtn" onclick="stepFactor(-0.5)">−</button>'+
+  '<input type="number" id="calibFactor" min="50" max="200" step="0.1" value="'+calib.factor+'" onchange="updateCalib()">'+
+  '<button type="button" class="stepbtn" onclick="stepFactor(0.5)">＋</button>%</label></div>'+
+  '<div class="calib-hint">💡 如现有票价计算与实际情况不符，请用 −/＋ 按钮或手动调整上方全网里程系数（默认 101.5%）以对齐官方App。</div>'+
+  '<div class="cards3">'+
+  '<div class="pcard cur"><div class="pname">现行票价</div><div class="pval">'+f0+' 元</div><div class="psub" style="color:#64748b">基准（估算）</div></div>'+
+  '<div class="pcard p1"><div class="pname">方案一</div><div class="pval">'+f1+' 元</div><div class="psub '+(f1-f0?'up':'same')+'">'+(f1-f0?('较现行 +'+fmt(f1-f0)+' 元'):'持平')+'</div></div>'+
+  '<div class="pcard p2"><div class="pname">方案二</div><div class="pval">'+f2+' 元</div><div class="psub '+(f2-f0?'up':'same')+'">'+(f2-f0?('较现行 +'+fmt(f2-f0)+' 元'):'持平')+'</div></div></div>'+
+  calibNote+
+  '<div class="barwrap">'+
+  '<div class="brow"><span class="bl">现行</span><span class="bt"><i style="width:'+(f0/max*100)+'%;background:#94a3b8"></i></span><span class="bv">'+f0+' 元</span></div>'+
+  '<div class="brow"><span class="bl">方案一</span><span class="bt"><i style="width:'+(f1/max*100)+'%;background:#1d4ed8"></i></span><span class="bv">'+f1+' 元</span></div>'+
+  '<div class="brow"><span class="bl">方案二</span><span class="bt"><i style="width:'+(f2/max*100)+'%;background:#d97706"></i></span><span class="bv">'+f2+' 元</span></div></div>'+
+  pathHTML(legs)+
+  '<p class="passhint">📐 计价代入：计费里程 d='+fmt(dAdj)+' km。现行 = '+formula+' = <b>'+f0+' 元</b>；方案一→<b>'+f1+' 元</b>；方案二→<b>'+f2+' 元</b>。</p>'+
+  '<div class="table-scroll"><table class="m-keep"><thead><tr><th style="width:28%">项目</th><th>现行</th><th>方案一</th><th>方案二</th></tr></thead><tbody>'+
+  '<tr><td>票价（元）</td><td>'+f0+'</td><td>'+f1+'</td><td>'+f2+'</td></tr>'+
+  '<tr><td>较现行变化</td><td>—</td><td>'+(f1-f0?('<span class="up">+'+fmt(f1-f0)+'（+'+fmt((f1-f0)/f0*100)+'%）</span>'):'持平')+'</td><td>'+(f2-f0?('<span class="up">+'+fmt(f2-f0)+'（+'+fmt((f2-f0)/f0*100)+'%）</span>'):'持平')+'</td></tr>'+
+  '<tr><td>每人公里单价（元/km）</td><td>'+u[0].toFixed(3)+'</td><td>'+u[1].toFixed(3)+'</td><td>'+u[2].toFixed(3)+'</td></tr></tbody></table></div>'+
+  '<h2 style="margin-top:16px;font-size:14px">计次票参考 <span class="tag">按新方案票价对比</span></h2>'+
+  '<div class="table-scroll"><table class="m-cards"><thead><tr><th>计次票</th><th>单次成本（用满）</th><th>较方案一（'+f1+' 元/次）</th><th>较方案二（'+f2+' 元/次）</th></tr></thead><tbody>'+passHtml+'</tbody></table></div>'+
+  '<h2 style="margin-top:16px;font-size:14px">满额优惠 / 公交换乘测算 <span class="tag">满100元后9折 · 换乘减1元可叠加</span></h2>'+
+  '<div class="manewrap"><label for="monthRides">每月乘坐次数：</label><input type="number" id="monthRides" min="1" step="1" value="'+manRides+'" inputmode="numeric" oninput="updateMane()"><span style="color:var(--muted);font-size:12px;">次（默认按工作日往返 44 次/月）</span>'+
+  '<label class="chk"><input type="checkbox" id="busChk" '+(busTransfer?'checked':'')+' onchange="updateBus()"> 公交换乘优惠（120分钟内换乘减1元/次）</label></div>'+
+  '<div id="maneBox"></div>'+
+  '<h2 style="margin-top:16px;font-size:14px">📈 优惠比价图表 <span class="tag">按实际优惠规则独立绘制 · 单次成本随每月次数变化</span></h2>'+
+  '<div id="chartBox"></div><div id="chartLegend"></div><p class="passhint" id="chartAdvice"></p>';
  renderMane();}
-function renderFareTable(){let rows=TABLE.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
- document.getElementById('fareTable').innerHTML=`<div class="table-scroll"><table><thead><tr><th>乘距范围（公里）</th><th>现状（元）</th><th>方案一（元）</th><th>方案二（元）</th></tr></thead><tbody>${rows}</tbody></table></div>`;}
+function renderFareTable(){var rows=TABLE.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td></tr>';}).join('');
+ document.getElementById('fareTable').innerHTML='<div class="table-scroll"><table><thead><tr><th>乘距范围（公里）</th><th>现状（元）</th><th>方案一（元）</th><th>方案二（元）</th></tr></thead><tbody>'+rows+'</tbody></table></div>';}
 stationIndex=buildStationIndex();pyMap=new Map();
-for(const n of stationIndex.keys())pyMap.set(n,buildPyKey(n));
+stationIndex.forEach(function(lines,name){pyMap.set(name,buildPyKey(name));});
 fillLineOptions();
 document.getElementById('lineA').value='8号线';document.getElementById('lineB').value='2号线';
 fillStations('A');fillStations('B');
 document.getElementById('stnA').value='芦恒路';document.getElementById('stnB').value='龙阳路';
 renderFareTable();
 compute();
+var integ=document.getElementById('integrity');if(integ)integ.textContent='V1.21 · 脚本完整加载 ✔';
 </script>
 </body>
 </html>
