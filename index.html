@@ -214,6 +214,10 @@
     font-weight: 800;
     margin-right: 6px;
   }
+  .changelog-text .ver{
+    color: #ffb46b;
+    font-weight: 700;
+  }
 
   footer{
     margin-top: 34px;
@@ -273,13 +277,13 @@
     </div>
   </header>
 
-  <!-- 公告文字（已上移至截图上方） -->
+  <!-- 公告文字 -->
   <p class="notice">
     <span class="dot"></span>
     📢 上海地铁新票价对比计算器已上线小红书小工具平台，欢迎大家使用
   </p>
 
-  <!-- 小红书工具入口（已上移至截图上方） -->
+  <!-- 小红书工具入口 -->
   <a class="cta" target="_blank" rel="noopener noreferrer"
      href="https://www.xiaohongshu.com/s/poster?bgimg=https%3A%2F%2Fsns-redskillhub-s1.xhscdn.com%2Fred_app_image%2F1040g4m8324nb65ks0a405o6d9m7gbtj95mo3d0o%3Fsign%3D1f576a31b9ba07f70544aa2d5bbe22c2%26t%3D6c7cadf4&amp;xhsshare=&amp;appuid=60cd4d8f000000000101f669&amp;apptime=1788574323&amp;deeplink=xhsdiscover%3A%2F%2FminiTool%2F6a929a78ee1dff0015044bed%3Fsource%3Dh5%26page_key%3D28%26xhsMpScreenMode%3Dfull%26share_id%3Da237ca6eb6054fd9b768ddd8fe2336cc%26share_channel%3Dcopy_link">
     <span class="cta-icon" aria-hidden="true">
@@ -303,23 +307,20 @@
     </span>
   </a>
 
-  <!-- 应用截图 -->
+  <!-- 应用截图（请将附件截图保存为 app-screenshot.png，与 index.html 同目录） -->
   <figure class="poster">
-    <img src="https://sns-redskillhub-s1.xhscdn.com/red_app_image/1040g4m8324nb65ks0a405o6d9m7gbtj95mo3d0o?sign=1f576a31b9ba07f70544aa2d5bbe22c2&amp;t=6c7cadf4"
-         alt="上海地铁新票价对比计算器 应用截图"
+    <img src="app-screenshot.png"
+         alt="上海地铁新票价对比计算器 计算结果截图"
          onerror="this.style.display='none';this.nextElementSibling.hidden=false;">
     <div class="fallback" hidden>上海地铁<br>新票价对比计算器</div>
   </figure>
 
-  <!-- V1.4.0 更新日志 -->
+  <!-- V1.5.0 更新日志 -->
   <div class="changelog">
-    <h3 class="changelog-title">V1.4.0 更新日志</h3>
+    <h3 class="changelog-title">V1.5.0 更新日志</h3>
     <p class="changelog-text">
-      <span class="num">①</span> 现行方案行不显示计次票（“—”占位，计次票为新方案配套）；<br>
-      <span class="num">②</span> 百度实测站间距优先、可切换原始站距、全网里程系数校准（默认100%）；<br>
-      <span class="num">③</span> 满额按次数累计（现70/新100后超出次数9折）、公交换乘减1元；<br>
-      <span class="num">④</span> 优惠比价图点按显示数据，且“各方案最优”中现行仅计满额优惠、不含计次票；<br>
-      <span class="num">⑤</span> 移动端优化、高亮颜色统一。
+      <span class="num">①</span> 示例站点恢复为常用热点示例（芦恒路→龙阳路、人民广场→浦东机场、虹桥火车站→迪士尼、莘庄→闵行开发区），默认OD恢复常用组合；<br>
+      <span class="num">②</span> 汇总 <span class="ver">1.4.1</span> 以来更新：13号线百度数据补全（<span class="ver">1.4.2</span>）、4号线环线实际乘坐取顺/逆较短方向（<span class="ver">1.4.3</span>）、补全优惠比价图模块（<span class="ver">1.4.4</span>）、恢复满额优惠测算表 renderMane（<span class="ver">1.4.5</span>）。
     </p>
   </div>
 
