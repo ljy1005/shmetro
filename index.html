@@ -52,6 +52,11 @@
     text-align:center;
   }
 
+  /* 词组防折断保护 */
+  .nw{ white-space: nowrap; }
+  /* 仅移动端生效的换行 */
+  .br-m{ display:none; }
+
   /* ===== 头部 ===== */
   .badge{
     display:inline-block;
@@ -230,14 +235,21 @@
   @media (max-width: 520px){
     .page{ padding: 40px 16px 48px; }
     .lines{ height: 150px; }
+    .br-m{ display:inline; }          /* 副标题移动端整齐两行 */
     .badge{ font-size: 13px; padding: 7px 18px; }
     h1{ letter-spacing: 0; margin: 16px 0 10px; }
+    .sub{ letter-spacing: 0; }
     .chips{ gap: 8px; margin-top: 14px; }
     .chip{ padding: 5px 14px; font-size: 13px; }
     .notice{ padding: 12px 16px; gap: 8px; }
+    /* 入口按钮紧凑化，保证标题单行完整 */
     .cta{ padding: 14px 16px; gap: 12px; }
-    .cta-icon{ width: 48px; height: 48px; }
-    .cta-icon svg{ width: 28px; height: 28px; }
+    .cta-icon{ width: 46px; height: 46px; }
+    .cta-icon svg{ width: 27px; height: 27px; }
+    .cta-text{ gap: 3px; }
+    .cta-text strong{ font-size: 15px; letter-spacing: 0; }
+    .cta-text small{ font-size: 12px; letter-spacing: 0; }
+    .cta-arrow svg{ width: 22px; height: 22px; }
     .poster{ border-radius: 20px; }
     .changelog{ padding: 16px 18px; }
   }
@@ -269,7 +281,9 @@
       <span class="t1">上海地铁</span>
       <span class="t2">新票价对比计算器</span>
     </h1>
-    <p class="sub">现行 vs 方案一 vs 方案二，多花多少一目了然</p>
+    <p class="sub">
+      <span class="nw">现行</span> vs <span class="nw">方案一</span> vs <span class="nw">方案二，</span><br class="br-m"><span class="nw">多花多少一目了然</span>
+    </p>
     <div class="chips">
       <span class="chip chip-gray">现行</span>
       <span class="chip chip-blue">方案一</span>
@@ -315,12 +329,13 @@
     <div class="fallback" hidden>上海地铁<br>新票价对比计算器</div>
   </figure>
 
-  <!-- V1.5.0 更新日志 -->
+  <!-- V1.6.0 更新日志 -->
   <div class="changelog">
-    <h3 class="changelog-title">V1.5.0 更新日志</h3>
+    <h3 class="changelog-title">V1.6.0 更新日志</h3>
     <p class="changelog-text">
-      <span class="num">①</span> 示例站点恢复为常用热点示例（芦恒路→龙阳路、人民广场→浦东机场、虹桥火车站→迪士尼、莘庄→闵行开发区），默认OD恢复常用组合；<br>
-      <span class="num">②</span> 汇总 <span class="ver">1.4.1</span> 以来更新：13号线百度数据补全（<span class="ver">1.4.2</span>）、4号线环线实际乘坐取顺/逆较短方向（<span class="ver">1.4.3</span>）、补全优惠比价图模块（<span class="ver">1.4.4</span>）、恢复满额优惠测算表 renderMane（<span class="ver">1.4.5</span>）。
+      <span class="num">①</span> 结构重构：站点/站间距/线路色数据分离，主文件仅保留界面与逻辑，降低单文件体积与出错率；<br>
+      <span class="num">②</span> 更新14号线百度实测站间距；<br>
+      <span class="num">③</span> 计价口径提示改为可折叠，减少手机端占用。功能与界面其余不变。
     </p>
   </div>
 
