@@ -223,6 +223,28 @@
     color: #ffb46b;
     font-weight: 700;
   }
+  /* 历史更新：更弱一级，与本次更新区分 */
+  .changelog-history{
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255,255,255,.12);
+    font-size: 12px;
+    line-height: 1.85;
+    color: #7c8db0;
+  }
+  .hist-tag{
+    display: inline-block;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    color: #9fb0d0;
+    border-radius: 6px;
+    padding: 1px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 6px;
+    vertical-align: 1px;
+    white-space: nowrap;
+  }
 
   footer{
     margin-top: 34px;
@@ -329,13 +351,17 @@
     <div class="fallback" hidden>上海地铁<br>新票价对比计算器</div>
   </figure>
 
-  <!-- V1.7.0 更新日志 -->
+  <!-- V1.7.1 更新日志 -->
   <div class="changelog">
-    <h3 class="changelog-title">V1.7.0 更新日志</h3>
+    <h3 class="changelog-title">V1.7.1 更新日志</h3>
     <p class="changelog-text">
-      <span class="num">①</span> 显示界面迭代优化，统一样式展现，提高用户体验。<br>
-      <span class="num">②</span> 修复“优惠建议”中极端情况下的优惠计算错误。<br>
-      <span class="num">③</span> 优惠建议涨红/跌绿统一高亮显示样式。
+      <span class="num">①</span> 方案卡涨价幅度"(+xx%)"移至增加金额下方分2行；<br>
+      <span class="num">②</span> 计次票/满额优惠对比文字保留完整"元/次"并保证一行；<br>
+      <span class="num">③</span> 现行卡"计次票不发行（新方案配套）"分2行显示不出界；<br>
+      <span class="num">④</span> 附件1对照表固定列宽、无横向滚动条。
+    </p>
+    <p class="changelog-text changelog-history">
+      <span class="hist-tag">历史更新</span>移除满额卡月总支出、小字标签上移同色、优惠建议按实际次数、计次票张数×次数、涨红跌绿；数据分离、14号线数据更新、百度实测优先、票价按最短路、环线取较短方向、系数校准、满额按次数累计、公交换乘减1元、图表点按交互。
     </p>
   </div>
 
