@@ -351,14 +351,16 @@
     <div class="fallback" hidden>上海地铁<br>新票价对比计算器</div>
   </figure>
 
-  <!-- V1.7.2 更新日志 -->
+  <!-- V1.8.3 更新日志 -->
   <div class="changelog">
-    <h3 class="changelog-title">V1.7.2 更新日志</h3>
+    <h3 class="changelog-title">V1.8.3 更新日志</h3>
     <p class="changelog-text">
-      计次票改为组合优化——枚举<span class="ver">45/60/90次票</span>任意张数混搭（如<span class="ver">105次=45次+60次</span>），并支持"计次票组合+剩余单次（含满额折扣）"混合方案，取单次成本最低者，优惠计算更准确，更贴近实际。
+      <span class="num">①</span> 增加最短路含同站换乘步行、多线站选线、换乘开关、计价里程=列车+换乘结合显示，实际乘坐距离与路径明细改为<span class="ver">"换乘最少、同换乘数取距离最短"</span>的线路（符合实际乘坐），票价仍按最短路计算；<br>
+      <span class="num">②</span> 每月次数增加 <span class="ver">−/＋ 步进按钮</span>，方便手机端；<br>
+      <span class="num">③</span> 修复"原始站距"报"未找到连通路径"——对换乘表未覆盖的同站跨线对（支线-主线，如嘉定新城/东川路/龙溪路）自动补<span class="ver">0权重连通边</span>。
     </p>
     <p class="changelog-text changelog-history">
-      <span class="hist-tag">历史更新</span>界面显示优化；数据分离、百度实测优先、票价按最短路、环线取较短方向、系数校准、涨红跌绿、图表点按交互。
+      <span class="hist-tag">历史更新</span>计次票组合优化、满额按次数累计、涨红跌绿、数据分离、百度实测优先、环线取较短方向、系数校准、图表点按交互。
     </p>
   </div>
 
