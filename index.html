@@ -128,7 +128,7 @@
     100%{ box-shadow:0 0 0 0 rgba(127,208,160,0); }
   }
 
-  /* ===== 小红书入口链接 ===== */
+  /* ===== 小红书入口链接（主按钮） ===== */
   .cta{
     margin: 16px auto 0;
     display:flex; align-items:center; gap:16px;
@@ -159,6 +159,37 @@
   .cta-arrow{ flex:0 0 auto; display:flex; }
   .cta:hover .cta-arrow{ animation: nudge .6s infinite alternate; }
   @keyframes nudge{ from{ transform:translateX(0);} to{ transform:translateX(5px);} }
+
+  /* ===== 本工具介绍（次级按钮） ===== */
+  .cta2{
+    margin: 12px auto 0;
+    display:flex; align-items:center; gap:14px;
+    max-width: 560px;
+    padding: 13px 20px;
+    border-radius: 18px;
+    text-decoration:none;
+    color:#cfe0ff;
+    background: rgba(43,92,255,.10);
+    border: 1px solid rgba(90,130,255,.45);
+    backdrop-filter: blur(6px);
+    transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+    text-align:left;
+  }
+  .cta2:hover{
+    transform: translateY(-3px);
+    background: rgba(43,92,255,.20);
+    box-shadow: 0 10px 26px rgba(43,92,255,.28);
+  }
+  .cta2-icon{
+    flex:0 0 auto;
+    width:46px; height:46px; border-radius:50%;
+    background: rgba(43,92,255,.28);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cta2-text{ flex:1 1 auto; display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .cta2-text strong{ font-size: clamp(14px, 2.4vw, 17px); letter-spacing:1px; color:#eaf1ff; }
+  .cta2-text small{ font-size:12px; color:#9fb4e6; letter-spacing:1px; }
+  .cta2-arrow{ flex:0 0 auto; display:flex; }
 
   /* ===== 应用截图 ===== */
   .poster{
@@ -264,7 +295,7 @@
     .chips{ gap: 8px; margin-top: 14px; }
     .chip{ padding: 5px 14px; font-size: 13px; }
     .notice{ padding: 12px 16px; gap: 8px; }
-    /* 入口按钮紧凑化，保证标题单行完整 */
+    /* 主按钮紧凑化，保证标题单行完整 */
     .cta{ padding: 14px 16px; gap: 12px; }
     .cta-icon{ width: 46px; height: 46px; }
     .cta-icon svg{ width: 27px; height: 27px; }
@@ -272,6 +303,13 @@
     .cta-text strong{ font-size: 15px; letter-spacing: 0; }
     .cta-text small{ font-size: 12px; letter-spacing: 0; }
     .cta-arrow svg{ width: 22px; height: 22px; }
+    /* 次级按钮紧凑化 */
+    .cta2{ padding: 12px 14px; gap: 10px; }
+    .cta2-icon{ width: 40px; height: 40px; }
+    .cta2-icon svg{ width: 20px; height: 20px; }
+    .cta2-text strong{ font-size: 14px; letter-spacing: 0; }
+    .cta2-text small{ font-size: 11px; letter-spacing: 0; }
+    .cta2-arrow svg{ width: 18px; height: 18px; }
     .poster{ border-radius: 20px; }
     .changelog{ padding: 16px 18px; }
   }
@@ -319,9 +357,9 @@
     📢 上海地铁新票价对比计算器已上线小红书小工具平台，欢迎大家使用
   </p>
 
-  <!-- 小红书工具入口 -->
+  <!-- 小红书工具入口（主按钮，链接已更新） -->
   <a class="cta" target="_blank" rel="noopener noreferrer"
-     href="https://www.xiaohongshu.com/s/poster?bgimg=https%3A%2F%2Fsns-redskillhub-s1.xhscdn.com%2Fred_app_image%2F1040g4m8324nb65ks0a405o6d9m7gbtj95mo3d0o%3Fsign%3D1f576a31b9ba07f70544aa2d5bbe22c2%26t%3D6c7cadf4&amp;xhsshare=&amp;appuid=60cd4d8f000000000101f669&amp;apptime=1788574323&amp;deeplink=xhsdiscover%3A%2F%2FminiTool%2F6a929a78ee1dff0015044bed%3Fsource%3Dh5%26page_key%3D28%26xhsMpScreenMode%3Dfull%26share_id%3Da237ca6eb6054fd9b768ddd8fe2336cc%26share_channel%3Dcopy_link">
+     href="https://www.xiaohongshu.com/s/poster?bgimg=https%3A%2F%2Fsns-redskillhub-s1.xhscdn.com%2Fred_app_image%2F1040g4m8324u96cafji605o6d9m7gbtj9s3qtsn8%3Fsign%3Db8db42014031270aa07c64294daac3ee%26t%3D6c839992&amp;xhsshare=&amp;appuid=60cd4d8f000000000101f669&amp;apptime=1789027857&amp;deeplink=xhsdiscover%3A%2F%2FminiTool%2F6a929a78ee1dff0015044bed%3Fsource%3Dh5%26page_key%3D28%26xhsMpScreenMode%3Dfull%26share_id%3Dd6e95caa7e1941cebdfed6df231fbffb%26share_channel%3Dcopy_link">
     <span class="cta-icon" aria-hidden="true">
       <!-- 地铁图标 -->
       <svg viewBox="0 0 64 64" width="34" height="34">
@@ -343,6 +381,27 @@
     </span>
   </a>
 
+  <!-- 本工具介绍（次级按钮，跳转 new.html） -->
+  <a class="cta2" href="new.html">
+    <span class="cta2-icon" aria-hidden="true">
+      <!-- 书本/介绍图标 -->
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#9db9ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <path d="M9 7h7M9 11h7"/>
+      </svg>
+    </span>
+    <span class="cta2-text">
+      <strong>本工具介绍</strong>
+      <small>功能特色 · 计价口径 · 使用说明</small>
+    </span>
+    <span class="cta2-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#9db9ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h13M13 6l6 6-6 6"/>
+      </svg>
+    </span>
+  </a>
+
   <!-- 应用截图（请将附件截图保存为 app-screenshot.png，与 index.html 同目录） -->
   <figure class="poster">
     <img src="app-screenshot.png"
@@ -351,16 +410,15 @@
     <div class="fallback" hidden>上海地铁<br>新票价对比计算器</div>
   </figure>
 
-  <!-- V1.8.3 更新日志 -->
+  <!-- V1.9.2 更新日志 -->
   <div class="changelog">
-    <h3 class="changelog-title">V1.8.3 更新日志</h3>
+    <h3 class="changelog-title">V1.9.2 更新日志</h3>
     <p class="changelog-text">
-      <span class="num">①</span> 增加最短路含同站换乘步行、多线站选线、换乘开关、计价里程=列车+换乘结合显示，实际乘坐距离与路径明细改为<span class="ver">"换乘最少、同换乘数取距离最短"</span>的线路（符合实际乘坐），票价仍按最短路计算；<br>
-      <span class="num">②</span> 每月次数增加 <span class="ver">−/＋ 步进按钮</span>，方便手机端；<br>
-      <span class="num">③</span> 修复"原始站距"报"未找到连通路径"——对换乘表未覆盖的同站跨线对（支线-主线，如嘉定新城/东川路/龙溪路）自动补<span class="ver">0权重连通边</span>。
+      <span class="num">①</span> 从用户实际通勤需求的出发，重构<span class="ver">满额优惠/公交换乘/月度年度模块</span>，完整模拟用户实际出行组合，计算更准确的<span class="ver">月度通勤费用</span>；<br>
+      <span class="num">②</span> 修复部分BUG，提升用户体验。
     </p>
     <p class="changelog-text changelog-history">
-      <span class="hist-tag">历史更新</span>计次票组合优化、满额按次数累计、涨红跌绿、数据分离、百度实测优先、环线取较短方向、系数校准、图表点按交互。
+      <span class="hist-tag">历史更新</span>界面显示优化；数据分离、百度实测优先、票价按最短路、环线取较短方向、系数校准、涨红跌绿、图表点按交互。
     </p>
   </div>
 
