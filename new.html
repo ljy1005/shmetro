@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="上海地铁新票价对比计算器：现行票价 vs 听证方案一/方案二，一键测算、一眼看清。">
+<title>上海地铁新票价对比计算器｜宣传页</title>
+<style>
+:root{--blue:#1352F0;--blue-d:#0A2E9E;--cyan:#39C5FF;--now:#7A86A8;--p1:#FF8A00;--p2:#12B886;--ink:#182142;--muted:#67719A;--r:16px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#E9EFFC;color:var(--ink);line-height:1.65}
+.app{max-width:480px;margin:0 auto;background:#F6F9FF;min-height:100vh;box-shadow:0 0 48px rgba(10,46,158,.12);overflow:hidden}
+/* ===== 页头主视觉 ===== */
+.hero{position:relative;background:linear-gradient(165deg,#0A2E9E 0%,#1352F0 48%,#2E9BFF 100%);color:#fff;padding:34px 22px 26px;border-radius:0 0 26px 26px;overflow:hidden}
+.hero .lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero-in{position:relative;z-index:1}
+.badge{display:inline-block;font-size:11px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);padding:4px 10px;border-radius:999px}
+.hero h1{font-size:30px;line-height:1.25;margin:14px 0 6px;letter-spacing:1px;text-shadow:0 2px 12px rgba(0,0,0,.15)}
+.hero .sub{font-size:14px;opacity:.92}
+.hero .slogan{margin-top:10px;font-size:13px;color:#CFE6FF;font-style:italic}
+.cta{display:inline-block;margin-top:16px;background:#fff;color:var(--blue);font-weight:700;font-size:15px;padding:10px 26px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:22px}
+.stats>div{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:8px 4px;text-align:center}
+.stats b{display:block;font-size:17px}
+.stats span{font-size:10px;opacity:.85}
+/* ===== 通用 ===== */
+.sec{padding:26px 18px 6px}
+.sec-title{font-size:19px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-title i{width:6px;height:20px;border-radius:3px;background:linear-gradient(180deg,var(--blue),var(--cyan));display:inline-block}
+.sec-title small{font-size:11px;color:var(--muted);font-weight:400;margin-left:auto}
+/* 核心功能卡 */
+.feat{display:flex;gap:12px;background:#fff;border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:0 4px 16px rgba(19,82,240,.06)}
+.feat .ico{flex:0 0 44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#E8F0FF,#D6F2FF);display:flex;align-items:center;justify-content:center;font-size:22px}
+.feat h3{font-size:15px;margin-bottom:2px}
+.feat p{font-size:12.5px;color:var(--muted)}
+/* 亮点 */
+.hl{background:linear-gradient(135deg,#fff,#F2F7FF);border:1px solid #E3ECFF;border-left:4px solid var(--blue);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.hl b{display:block;font-size:14px;margin-bottom:2px}
+.hl span{color:var(--muted);font-size:12.5px}
+/* 试算 */
+.demo{background:#fff;border-radius:var(--r);padding:16px;box-shadow:0 4px 16px rgba(19,82,240,.08)}
+.demo label{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;margin-bottom:8px}
+.demo input[type=number]{width:110px;padding:7px 10px;border:1.5px solid #D8E3FA;border-radius:10px;font-size:14px;text-align:right;color:var(--blue);font-weight:700;outline:none}
+.demo input[type=number]:focus{border-color:var(--blue)}
+input[type=range]{width:100%;margin:2px 0 14px;accent-color:var(--blue)}
+.chk{display:flex!important;justify-content:flex-start!important;gap:8px;font-weight:400!important;font-size:12.5px!important;color:var(--muted);align-items:flex-start;margin-bottom:12px!important}
+.chk input{margin-top:3px;accent-color:var(--blue)}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rcard{border-radius:14px;padding:12px 6px 10px;text-align:center;color:#fff}
+.rcard.now{background:linear-gradient(160deg,#8A93B5,#6B7595)}
+.rcard.p1{background:linear-gradient(160deg,#FFA23A,#F57C00)}
+.rcard.p2{background:linear-gradient(160deg,#2BD9A3,#0CA678)}
+.rcard span{font-size:11px;opacity:.95}
+.rcard b{display:block;font-size:26px;line-height:1.2;margin:2px 0}
+.rcard b em{font-size:11px;font-style:normal;font-weight:400}
+.rcard .m{font-size:10.5px;opacity:.92}
+.rcard .d{margin-top:6px;font-size:10.5px;background:rgba(255,255,255,.22);border-radius:999px;padding:2px 8px;display:inline-block}
+.tip{margin-top:10px;font-size:12px;background:#FFF7E8;border:1px dashed #FFC96B;color:#8A5B00;border-radius:10px;padding:8px 10px;display:none}
+.fine{margin-top:10px;font-size:11px;color:#9AA3C0}
+/* 三步 */
+.steps{display:flex;align-items:stretch;gap:6px}
+.step{flex:1;background:#fff;border-radius:14px;padding:14px 8px;text-align:center;box-shadow:0 4px 16px rgba(19,82,240,.06)}
+.step .n{width:30px;height:30px;margin:0 auto 8px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
+.step h4{font-size:13px}
+.step p{font-size:11px;color:var(--muted)}
+.arrow{align-self:center;color:var(--blue);font-weight:800;font-size:20px}
+/* 政策 */
+.rule{background:#fff;border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:0 4px 16px rgba(19,82,240,.06);border-top:4px solid var(--now)}
+.rule.r1{border-top-color:var(--p1)}.rule.r2{border-top-color:var(--p2)}
+.tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--now);border-radius:999px;padding:2px 10px;margin-bottom:6px}
+.rule.r1 .tag{background:var(--p1)}.rule.r2 .tag{background:var(--p2)}
+.rule h3{font-size:14px;margin-bottom:4px}
+.rule p{font-size:12.5px;color:var(--muted)}
+.rule .note{margin-top:6px;font-size:12px;color:var(--blue);background:#EEF4FF;border-radius:8px;padding:6px 8px}
+.impact{background:#fff;border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:0 4px 16px rgba(19,82,240,.06)}
+.impact h3{font-size:14px;margin-bottom:6px}
+.bar{display:flex;height:26px;border-radius:8px;overflow:hidden;margin:4px 0 2px;font-size:10.5px;color:#fff;font-weight:600}
+.bar div{display:flex;align-items:center;justify-content:center;white-space:nowrap}
+.barlab{font-size:12px;font-weight:700;margin-top:10px}
+details{background:#fff;border-radius:var(--r);padding:12px 14px;box-shadow:0 4px 16px rgba(19,82,240,.06);margin-bottom:12px}
+summary{font-size:13.5px;font-weight:700;color:var(--blue);cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:11.5px}
+th,td{border-bottom:1px solid #EDF1FA;padding:5px 4px;text-align:center}
+th{background:#F3F7FF}
+td.hi1{background:#FFF3E0;color:#C25E00;font-weight:700}
+td.hi2{background:#E6F9F1;color:#0A7A55;font-weight:700}
+/* 提示与页尾 */
+.notice{background:#F0F4FF;border:1px solid #DCE6FF;border-radius:var(--r);padding:12px 14px;font-size:12px;color:#44517A;margin:14px 18px 20px}
+footer{background:linear-gradient(165deg,#0A2E9E,#1352F0 60%,#2E9BFF);color:#fff;text-align:center;padding:30px 22px 34px;border-radius:26px 26px 0 0;margin-top:8px}
+footer .slo{font-size:19px;font-weight:800;letter-spacing:1px}
+footer .slo2{font-size:12px;opacity:.85;margin-top:6px}
+footer .src{margin-top:14px;font-size:10.5px;opacity:.65;line-height:1.7}
+/* 入场动画 */
+.reveal{opacity:0;transform:translateY(18px);transition:all .55s ease}
+.reveal.show{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ① 页头主视觉 -->
+  <header class="hero">
+    <svg class="lines" viewBox="0 0 480 360" fill="none">
+      <path d="M-10 300 C 90 300 110 230 190 230 C 270 230 300 290 380 270 C 440 255 460 210 500 200" stroke="rgba(255,255,255,.35)" stroke-width="3"/>
+      <path d="M-10 240 C 60 240 120 190 200 170 C 280 150 330 190 410 160 C 450 145 470 110 500 100" stroke="rgba(125,220,255,.45)" stroke-width="3"/>
+      <path d="M-10 340 C 120 340 160 300 260 310 C 360 320 420 300 500 320" stroke="rgba(255,255,255,.2)" stroke-width="3"/>
+      <circle cx="190" cy="230" r="5" fill="#fff" opacity=".8"/><circle cx="380" cy="270" r="5" fill="#9BE3FF" opacity=".9"/>
+      <circle cx="200" cy="170" r="5" fill="#fff" opacity=".6"/><circle cx="410" cy="160" r="5" fill="#9BE3FF" opacity=".7"/>
+    </svg>
+    <div class="hero-in">
+      <span class="badge">📢 数据同源《优化上海市轨道交通票价机制听证方案》</span>
+      <h1>上海地铁<br>新票价对比计算器</h1>
+      <p class="sub">现行 vs 两大方案 · 一键测算 · 一眼看清</p>
+      <p class="slogan">「您的每一程，都值得算得明明白白」</p>
+      <a class="cta" href="#demo">立即试算 ↓</a>
+      <div class="stats">
+        <div><b>19</b><span>运营线路(条)</span></div>
+        <div><b>818</b><span>运营里程(公里)</span></div>
+        <div><b>562万</b><span>日均进站(人次)</span></div>
+        <div><b>4.23</b><span>现行均价(元)</span></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ② 核心功能区 -->
+  <section class="sec" id="features">
+    <h2 class="sec-title"><i></i>五大核心功能</h2>
+    <div class="feat reveal"><div class="ico">🚇</div><div><h3>全网覆盖 · 随心选站</h3><p>覆盖全网 19 条运营线路（含 5 号线、10 号线、11 号线支线段及浦江线）全部车站站间距数据，任意起讫站点，即选即算。</p></div></div>
+    <div class="feat reveal"><div class="ico">⚖️</div><div><h3>三案并行 · 秒级对比</h3><p>同时输出「现行票价 / 听证方案一 / 听证方案二」票价，自动显示每乘次上涨金额——方案一保短途、方案二更均衡，差异一目了然。</p></div></div>
+    <div class="feat reveal"><div class="ico">📏</div><div><h3>精准里程 · 双重校验</h3><p>内置逐区间站间距数据库，并与实测里程逐一交叉校验，乘距计算更精准、票价结果更可靠。</p></div></div>
+    <div class="feat reveal"><div class="ico">🎟️</div><div><h3>优惠政策 · 一并算清</h3><p>内置计次票（30日内 45次/210元、60次/270元、90次/390元）与满额优惠（每月票款累计满 100 元后部分享 9 折），帮您找出最省钱出行方式。</p></div></div>
+    <div class="feat reveal"><div class="ico">🧮</div><div><h3>通勤账本 · 一目了然</h3><p>按出行频次估算月度通勤支出及涨幅，为听证意见表达、家庭预算与出行决策提供数据参考。</p></div></div>
+  </section>
+
+  <!-- ③ 亮点区 -->
+  <section class="sec" id="highlights">
+    <h2 class="sec-title"><i></i>三大亮点</h2>
+    <div class="hl reveal"><b>⭐ 权威依据 · 与听证同步</b><span>票价分段规则严格遵循听证方案及附件1《现行票价及两个方案不同乘距票价》，规则透明可查（本页附全票价表）。</span></div>
+    <div class="hl reveal"><b>⚡ 秒出结果 · 零门槛</b><span>无需注册、无需下载，三步完成、选站即出结果，长辈也能轻松上手。</span></div>
+    <div class="hl reveal"><b>👀 直观呈现 · 贴心提示</b><span>三方案票价与差额以色彩卡片直观呈现；自动标注适用范围——不含磁浮线、金山铁路、市域机场线及以后开通的市域线，避免误算。</span></div>
+  </section>
+
+  <!-- 试算演示 -->
+  <section class="sec" id="demo">
+    <h2 class="sec-title"><i></i>在线试算<small>输入乘距即可体验（默认全市平均乘距）</small></h2>
+    <div class="demo reveal">
+      <label>乘距（公里）<input type="number" id="dist" value="16.45" min="0.1" max="200" step="0.1"></label>
+      <input type="range" id="slider" min="1" max="130" step="0.5" value="16.5">
+      <label>每月乘坐次数<input type="number" id="trips" value="44" min="0" max="400"></label>
+      <label class="chk"><input type="checkbox" id="disc" checked>新方案叠加满额优惠测算（每月票款超 100 元部分享 9 折；现行票价未叠加新优惠）</label>
+      <div class="res" id="res"></div>
+      <div class="tip" id="tip"></div>
+      <p class="fine">* 试算结果仅供参考，实际票价与优惠规则以官方发布及现场结算为准。</p>
+    </div>
+  </section>
+
+  <!-- ④ 使用指引 -->
+  <section class="sec" id="steps">
+    <h2 class="sec-title"><i></i>三步上手</h2>
+    <div class="steps reveal">
+      <div class="step"><div class="n">1</div><h4>选出发站</h4><p>全网车站任选</p></div>
+      <div class="arrow">›</div>
+      <div class="step"><div class="n">2</div><h4>选到达站</h4><p>支线换乘都覆盖</p></div>
+      <div class="arrow">›</div>
+      <div class="step"><div class="n">3</div><h4>看对比</h4><p>三方案＋优惠测算</p></div>
+    </div>
+  </section>
+
+  <!-- ⑤ 政策说明区 -->
+  <section class="sec" id="policy">
+    <h2 class="sec-title"><i></i>票价规则一览</h2>
+    <div class="rule reveal"><span class="tag">现行票价</span><h3>0—6 公里 3 元，6 公里以后每 10 公里加 1 元</h3><p>2005 年 9 月经听证制定实施，已运行 20 余年；2025 年乘客实际平均每人次票价 4.23 元，平均乘距 16.45 公里。</p></div>
+    <div class="rule r1 reveal"><span class="tag">听证方案一</span><h3>起乘价 3 元不变，起乘间距缩短为 0—4 公里</h3><p>后续按 4、4、4、7、7、7、10、10、10 公里进阶；67 公里以上每 15 公里加 1 元。</p><div class="note">特点：保留 3 元起乘价，减少短途乘客影响、稳定短途客流；中长距离上涨幅度大于方案二。</div></div>
+    <div class="rule r2 reveal"><span class="tag">听证方案二</span><h3>起乘价调整为 4 元，起乘间距 0—6 公里不变</h3><p>后续按 6、8、8、10、10、12、12 公里进阶；72 公里以上每 14 公里加 1 元。</p><div class="note">特点：各乘距支出均有提升，约 6 成乘客每乘次上涨 1 元，影响相对均衡。</div></div>
+
+    <div class="impact reveal">
+      <h3>📊 影响速览（按目前客流结构初步测算）</h3>
+      <div class="barlab">方案一</div>
+      <div class="bar">
+        <div style="width:20%;background:#8A93B5">不变 20%</div>
+        <div style="width:25%;background:#FFB259">+1元 25%</div>
+        <div style="width:39%;background:#F57C00">+2元 39%</div>
+        <div style="width:16%;background:#D9480F">+3元 16%</div>
+      </div>
+      <div class="barlab">方案二</div>
+      <div class="bar">
+        <div style="width:61%;background:#63E6BE;color:#0A5C42">+1元 61%</div>
+        <div style="width:39%;background:#0CA678">+2元 39%</div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px">实施优惠措施后：方案一平均每人次票价 4.23 → 5.22 元（+0.99 元，约 +23.3%）；方案二 4.23 → 5.20 元（+0.97 元，约 +22.9%）。购买计次票乘客平均每次出行支出涨幅：方案一约 1.55%、方案二约 2.84%。</p>
+    </div>
+
+    <details class="reveal">
+      <summary>📋 展开查看附件1《现行票价及两个方案不同乘距票价》全表（差异自动高亮）</summary>
+      <table><thead><tr><th>乘距(公里)</th><th>现状(元)</th><th>方案一(元)</th><th>方案二(元)</th></tr></thead><tbody id="tb"></tbody></table>
+    </details>
+
+    <div class="rule reveal" style="border-top-color:var(--blue)">
+      <span class="tag" style="background:var(--blue)">数据与政策依据</span>
+      <p>· 票价规则：上海市发展改革委《优化上海市轨道交通票价机制听证方案》及附件1（2026 年 8 月 19 日印发）；</p>
+      <p>· 站间距数据：全网线路站间距数据库，与实测里程逐区间交叉校验；</p>
+      <p>· 适用范围：全市轨道交通，不含磁浮线、金山铁路、市域机场线及以后开通的市域线；</p>
+      <p>· 同步建立票价动态调整机制：以 2027 年相关统计数据为基准，累计变动幅度 ≥0.5 元时可启动调价程序。</p>
+    </div>
+  </section>
+
+  <!-- ⑥ 免责声明 -->
+  <div class="notice reveal">⚠️ <b>温馨提示：</b>本页面及试算结果仅供参考，实际票价与优惠规则以政府及运营企业正式发布和现场结算为准；计次票详情见上海地铁官网（www.shmetro.com）。</div>
+
+  <!-- 页尾标语 -->
+  <footer>
+    <div class="slo">票价调整不糊涂</div>
+    <div class="slo2">算一算，心里有本明白账！</div>
+    <div class="src">依据：上海市发展改革委《优化上海市轨道交通票价机制听证方案》（2026年8月19日印发）<br>站间距数据经实测交叉校验 ｜ 本页面为工具宣传演示页</div>
+  </footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+/* ===== 三方案计价引擎（严格对应听证方案及附件1） ===== */
+function fareNow(d){return d<=6?3:3+Math.ceil((d-6)/10);}
+const B1=[[4,3],[8,4],[12,5],[16,6],[23,7],[30,8],[37,9],[47,10],[57,11],[67,12]];
+const B2=[[6,4],[12,5],[20,6],[28,7],[38,8],[48,9],[60,10],[72,11]];
+function fareP1(d){for(const[l,f]of B1){if(d<=l)return f}return 12+Math.ceil((d-67)/15);}
+function fareP2(d){for(const[l,f]of B2){if(d<=l)return f}return 11+Math.ceil((d-72)/14);}
+function fmt(x){x=Math.round(x*100)/100;return x%1===0?String(x):x.toFixed(2).replace(/0$/,'');}
+function withDisc(s){return s>100?100+(s-100)*0.9:s;}
+/* ===== 试算 ===== */
+function calc(){
+  const d=parseFloat($('dist').value)||0,n=parseInt($('trips').value)||0,disc=$('disc').checked;
+  if(d<=0){$('res').innerHTML='<p style="grid-column:1/-1;text-align:center;color:#9AA3C0;font-size:12px">请输入大于 0 的乘距</p>';$('tip').style.display='none';return;}
+  const f0=fareNow(d),f1=fareP1(d),f2=fareP2(d);
+  let m0=f0*n,m1=f1*n,m2=f2*n;
+  if(disc){m1=withDisc(m1);m2=withDisc(m2);}
+  const card=(cls,name,f,m,dtxt)=>`<div class="rcard ${cls}"><span>${name}</span><b>${f}<em> 元/人次</em></b><div class="m">每月约 ${fmt(m)} 元</div><div class="d">${dtxt}</div></div>`;
+  const dif=x=>'每乘次 '+(x>0?'+':'')+x+' 元';
+  $('res').innerHTML=card('now','现行票价',f0,m0,'基准')+card('p1','听证方案一',f1,m1,dif(f1-f0))+card('p2','听证方案二',f2,m2,dif(f2-f0));
+  const tip=$('tip');
+  if(n>=45){
+    let t;
+    if(n<=45)t='45次计次票 210 元（折合约 4.67 元/次）';
+    else if(n<=60)t='60次计次票 270 元（约 4.50 元/次）';
+    else if(n<=90)t='90次计次票 390 元（约 4.33 元/次）';
+    else t='90次计次票 390 元＋超出部分按次购票';
+    tip.innerHTML='🎟️ 高频通勤建议关注计次票（30日内有效）：'+t+'。据官方测算，购买计次票后平均每乘次支出涨幅仅约 1.55%（方案一）/ 2.84%（方案二）。';
+    tip.style.display='block';
+  }else tip.style.display='none';
+}
+$('dist').addEventListener('input',()=>{$('slider').value=$('dist').value;calc();});
+$('slider').addEventListener('input',()=>{$('dist').value=$('slider').value;calc();});
+$('trips').addEventListener('input',calc);
+$('disc').addEventListener('change',calc);
+calc();
+/* ===== 附件1 全票价表 ===== */
+const T=[[0,4,3,3,4],[4,6,3,4,4],[6,8,4,4,5],[8,12,4,5,5],[12,16,4,6,6],[16,20,5,7,6],[20,23,5,7,7],[23,26,5,8,7],[26,28,6,8,7],[28,30,6,8,8],[30,36,6,9,8],[36,37,7,9,8],[37,38,7,10,8],[38,46,7,10,9],[46,47,8,10,9],[47,48,8,11,9],[48,56,8,11,10],[56,57,9,11,10],[57,60,9,12,10],[60,66,9,12,11],[66,67,10,12,11],[67,72,10,13,11],[72,76,10,13,12],[76,82,11,13,12],[82,86,11,14,12],[86,96,12,14,13],[96,97,13,14,13],[97,100,13,15,13],[100,106,13,15,14],[106,112,14,15,14],[112,114,14,16,14],[114,116,14,16,15],[116,124,15,16,15]];
+$('tb').innerHTML=T.map(r=>`<tr><td>${r[0]}-${r[1]}</td><td>${r[2]}</td><td class="${r[3]!==r[2]?'hi1':''}">${r[3]}</td><td class="${r[4]!==r[2]?'hi2':''}">${r[4]}</td></tr>`).join('');
+/* ===== 滚动入场动画 ===== */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
