@@ -102,7 +102,7 @@
   .chip-blue{ background:var(--blue); color:#fff; }
   .chip-orange{ background:var(--orange); color:#fff; }
 
-  /* ===== 公告文字 ===== */
+  /* ===== 公告 / 荣誉播报 ===== */
   .notice{
     margin: 26px auto 0;
     max-width: 640px;
@@ -114,6 +114,12 @@
     font-size: clamp(14px, 2.2vw, 18px);
     font-weight: 700;
     color: #dbe6ff;
+  }
+  /* 关键修复：整段文案包在一个子项内，恢复行内正常换行 */
+  .notice-text{
+    flex: 1 1 auto;
+    min-width: 0;
+    line-height: 1.7;
     text-wrap: balance;
   }
   .notice .dot{
@@ -126,6 +132,33 @@
     0%{ box-shadow:0 0 0 0 rgba(127,208,160,.7); }
     70%{ box-shadow:0 0 0 12px rgba(127,208,160,0); }
     100%{ box-shadow:0 0 0 0 rgba(127,208,160,0); }
+  }
+  /* 高亮：小红书品牌红 */
+  .notice .hl-xhs{
+    color: #ff6b81;
+    font-weight: 800;
+    text-shadow: 0 0 14px rgba(255,36,66,.45);
+  }
+  /* 高亮：第1名 金牌金 */
+  .notice .hl-rank{
+    color: #ffd166;
+    font-weight: 800;
+    text-shadow: 0 0 14px rgba(255,209,102,.45);
+  }
+  /* 日期小标签 */
+  .notice .date-tag{
+    display: inline-block;
+    margin-left: 8px;
+    padding: 1px 9px;
+    border-radius: 6px;
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #9fb0d0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    vertical-align: 2px;
+    white-space: nowrap;
   }
 
   /* ===== 小红书入口链接（主按钮） ===== */
@@ -294,7 +327,11 @@
     .sub{ letter-spacing: 0; }
     .chips{ gap: 8px; margin-top: 14px; }
     .chip{ padding: 5px 14px; font-size: 13px; }
-    .notice{ padding: 12px 16px; gap: 8px; }
+    /* 公告条：顶端对齐，圆点对齐首行，多行更整齐 */
+    .notice{ padding: 12px 16px; gap: 8px; align-items: flex-start; }
+    .notice .dot{ margin-top: 7px; }
+    .notice-text{ font-size: 14px; }
+    .notice .date-tag{ margin-left: 4px; font-size: 10px; }
     /* 主按钮紧凑化，保证标题单行完整 */
     .cta{ padding: 14px 16px; gap: 12px; }
     .cta-icon{ width: 46px; height: 46px; }
@@ -351,10 +388,10 @@
     </div>
   </header>
 
-  <!-- 公告文字 -->
+  <!-- 荣誉播报 -->
   <p class="notice">
     <span class="dot"></span>
-    📢 上海地铁新票价对比计算器已上线小红书小工具平台，欢迎大家使用
+    <span class="notice-text">🏆 本应用荣登<span class="hl-xhs">小红书</span>小工具官方Vibecoding作品频道查询工具类<span class="hl-rank">第1名</span><span class="date-tag">截止20260913</span></span>
   </p>
 
   <!-- 小红书工具入口（主按钮） -->
