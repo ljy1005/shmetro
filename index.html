@@ -68,7 +68,6 @@
     box-shadow: 0 4px 18px rgba(43,92,255,.45);
   }
 
-  /* 标题：两行独立控字号，移动端 8 字一行完整显示 */
   h1{
     margin: 20px 0 12px;
     font-weight: 900;
@@ -102,7 +101,7 @@
   .chip-blue{ background:var(--blue); color:#fff; }
   .chip-orange{ background:var(--orange); color:#fff; }
 
-  /* ===== 公告 / 荣誉播报 ===== */
+  /* ===== 公告 / 荣誉播报（可点击） ===== */
   .notice{
     margin: 26px auto 0;
     max-width: 640px;
@@ -114,8 +113,14 @@
     font-size: clamp(14px, 2.2vw, 18px);
     font-weight: 700;
     color: #dbe6ff;
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
   }
-  /* 关键修复：整段文案包在一个子项内，恢复行内正常换行 */
+  .notice:hover{
+    background: rgba(43,92,255,.24);
+    border-color: rgba(150,180,255,.85);
+    transform: translateY(-2px);
+  }
   .notice-text{
     flex: 1 1 auto;
     min-width: 0;
@@ -133,19 +138,16 @@
     70%{ box-shadow:0 0 0 12px rgba(127,208,160,0); }
     100%{ box-shadow:0 0 0 0 rgba(127,208,160,0); }
   }
-  /* 高亮：小红书品牌红 */
   .notice .hl-xhs{
     color: #ff6b81;
     font-weight: 800;
     text-shadow: 0 0 14px rgba(255,36,66,.45);
   }
-  /* 高亮：第1名 金牌金 */
   .notice .hl-rank{
     color: #ffd166;
     font-weight: 800;
     text-shadow: 0 0 14px rgba(255,209,102,.45);
   }
-  /* 日期小标签 */
   .notice .date-tag{
     display: inline-block;
     margin-left: 8px;
@@ -160,6 +162,123 @@
     vertical-align: 2px;
     white-space: nowrap;
   }
+  /* 右侧"可查看"小箭头 */
+  .notice-more{
+    flex:0 0 auto;
+    font-size: 20px;
+    line-height: 1;
+    color: #8fa0c5;
+    transition: color .2s ease, transform .2s ease;
+  }
+  .notice:hover .notice-more{
+    color: #ffd166;
+    transform: translateX(3px);
+  }
+
+  /* ===== 排名弹窗 ===== */
+  .modal{
+    position: fixed; inset: 0;
+    z-index: 99;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    visibility: hidden; opacity: 0;
+    transition: opacity .25s ease, visibility .25s ease;
+  }
+  .modal.show{ visibility: visible; opacity: 1; }
+  .modal-mask{
+    position: absolute; inset: 0;
+    background: rgba(4,8,20,.78);
+    backdrop-filter: blur(5px);
+  }
+  .modal-card{
+    position: relative; z-index: 1;
+    width: 100%; max-width: 420px;
+    max-height: 86vh; overflow-y: auto;
+    background: #101a3a;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 20px;
+    padding: 22px 20px 20px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.65);
+    transform: translateY(16px) scale(.97);
+    transition: transform .25s ease;
+    text-align: center;
+  }
+  .modal.show .modal-card{ transform: none; }
+  .modal-close{
+    position: absolute; top: 10px; right: 10px;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(255,255,255,.08);
+    color: #cfe0ff;
+    font-size: 20px; line-height: 1;
+    cursor: pointer;
+    transition: background .2s ease;
+  }
+  .modal-close:hover{ background: rgba(255,255,255,.18); }
+  .modal-title{
+    font-size: 17px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .modal-sub{
+    margin-top: 6px;
+    font-size: 12px;
+    color: #9fb0d0;
+    letter-spacing: 1px;
+  }
+  .modal-sub b{ color: #ffd166; }
+  .modal-img-wrap{
+    position: relative;
+    display: block;
+    margin-top: 14px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.16);
+    background: #0d1531;
+  }
+  .modal-img-wrap img{
+    display: block;
+    width: 100%; height: auto;
+    transition: transform .4s ease;
+  }
+  .modal-img-wrap:hover img{ transform: scale(1.03); }
+  .modal-img-fallback{
+    display: none;
+    align-items: center; justify-content: center;
+    flex-direction: column; gap: 6px;
+    min-height: 220px;
+    padding: 40px 20px;
+    color: #8fa0c5;
+    font-size: 14px; font-weight: 700;
+  }
+  .modal-img-fallback small{ font-size: 11px; font-weight: 400; color: #6d7fa3; }
+  .modal-img-hint{
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 22px 12px 9px;
+    background: linear-gradient(transparent, rgba(0,0,0,.8));
+    color: #ffd166;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 1px;
+    pointer-events: none;
+  }
+  .modal-link{
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(43,92,255,.12);
+    border: 1px solid rgba(90,130,255,.42);
+    color: #9db9ff;
+    font-size: 12px;
+    text-decoration: none;
+    word-break: break-all;
+    text-align: left;
+    transition: background .2s ease;
+  }
+  .modal-link:hover{ background: rgba(43,92,255,.24); }
+  .modal-link svg{ flex: 0 0 auto; }
 
   /* ===== 小红书入口链接（主按钮） ===== */
   .cta{
@@ -287,7 +406,6 @@
     color: #ffb46b;
     font-weight: 700;
   }
-  /* 历史更新：更弱一级，与本次更新区分 */
   .changelog-history{
     margin-top: 10px;
     padding-top: 10px;
@@ -321,18 +439,17 @@
   @media (max-width: 520px){
     .page{ padding: 40px 16px 48px; }
     .lines{ height: 150px; }
-    .br-m{ display:inline; }          /* 副标题移动端整齐两行 */
+    .br-m{ display:inline; }
     .badge{ font-size: 13px; padding: 7px 18px; }
     h1{ letter-spacing: 0; margin: 16px 0 10px; }
     .sub{ letter-spacing: 0; }
     .chips{ gap: 8px; margin-top: 14px; }
     .chip{ padding: 5px 14px; font-size: 13px; }
-    /* 公告条：顶端对齐，圆点对齐首行，多行更整齐 */
     .notice{ padding: 12px 16px; gap: 8px; align-items: flex-start; }
     .notice .dot{ margin-top: 7px; }
     .notice-text{ font-size: 14px; }
     .notice .date-tag{ margin-left: 4px; font-size: 10px; }
-    /* 主按钮紧凑化，保证标题单行完整 */
+    .notice-more{ margin-top: 2px; }
     .cta{ padding: 14px 16px; gap: 12px; }
     .cta-icon{ width: 46px; height: 46px; }
     .cta-icon svg{ width: 27px; height: 27px; }
@@ -340,7 +457,6 @@
     .cta-text strong{ font-size: 15px; letter-spacing: 0; }
     .cta-text small{ font-size: 12px; letter-spacing: 0; }
     .cta-arrow svg{ width: 22px; height: 22px; }
-    /* 次级按钮紧凑化 */
     .cta2{ padding: 12px 14px; gap: 10px; }
     .cta2-icon{ width: 40px; height: 40px; }
     .cta2-icon svg{ width: 20px; height: 20px; }
@@ -349,6 +465,8 @@
     .cta2-arrow svg{ width: 18px; height: 18px; }
     .poster{ border-radius: 20px; }
     .changelog{ padding: 16px 18px; }
+    .modal{ padding: 16px; }
+    .modal-card{ padding: 18px 14px 14px; }
   }
 </style>
 </head>
@@ -388,17 +506,48 @@
     </div>
   </header>
 
-  <!-- 荣誉播报 -->
-  <p class="notice">
+  <!-- 荣誉播报（点击弹出排名弹窗） -->
+  <p class="notice" id="rankNotice" role="button" tabindex="0" title="点击查看榜单截图与排名链接">
     <span class="dot"></span>
     <span class="notice-text">🏆 本应用荣登<span class="hl-xhs">小红书</span>小工具官方Vibecoding作品频道查询工具类<span class="hl-rank">第1名</span><span class="date-tag">截止20260913</span></span>
+    <span class="notice-more" aria-hidden="true">›</span>
   </p>
+
+  <!-- 排名弹窗 -->
+  <div class="modal" id="rankModal" aria-hidden="true">
+    <div class="modal-mask" data-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-label="小红书vibecoding作品排行榜">
+      <button class="modal-close" data-close aria-label="关闭">×</button>
+      <h3 class="modal-title">🏆 小红书 Vibecoding 作品排行榜</h3>
+      <p class="modal-sub">查询工具类 · <b>第 1 名</b> · 3万人累计使用</p>
+
+      <!-- 点击截图跳转排名网页 -->
+      <a class="modal-img-wrap" href="https://cowork.xiaohongshu.com/s/vibe-app-rank" target="_blank" rel="noopener noreferrer">
+        <!-- 请将榜单截图保存为 rank-screenshot.png，与 index.html 同目录 -->
+        <img src="rank-screenshot.png" alt="小红书vibecoding作品排行榜 查询工具类第1名 截图"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="modal-img-fallback">
+          榜单截图未加载
+          <small>请将截图保存为 rank-screenshot.png 并放在 index.html 同目录</small>
+        </div>
+        <span class="modal-img-hint">点击截图跳转榜单页面 ↗</span>
+      </a>
+
+      <!-- 点击链接跳转排名网页 -->
+      <a class="modal-link" href="https://cowork.xiaohongshu.com/s/vibe-app-rank" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9db9ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+        https://cowork.xiaohongshu.com/s/vibe-app-rank
+      </a>
+    </div>
+  </div>
 
   <!-- 小红书工具入口（主按钮） -->
   <a class="cta" target="_blank" rel="noopener noreferrer"
      href="https://www.xiaohongshu.com/s/poster?bgimg=https%3A%2F%2Fsns-redskillhub-s1.xhscdn.com%2Fred_app_image%2F1040g4m8324u96cafji605o6d9m7gbtj9s3qtsn8%3Fsign%3Db8db42014031270aa07c64294daac3ee%26t%3D6c839992&amp;xhsshare=&amp;appuid=60cd4d8f000000000101f669&amp;apptime=1789027857&amp;deeplink=xhsdiscover%3A%2F%2FminiTool%2F6a929a78ee1dff0015044bed%3Fsource%3Dh5%26page_key%3D28%26xhsMpScreenMode%3Dfull%26share_id%3Dd6e95caa7e1941cebdfed6df231fbffb%26share_channel%3Dcopy_link">
     <span class="cta-icon" aria-hidden="true">
-      <!-- 地铁图标 -->
       <svg viewBox="0 0 64 64" width="34" height="34">
         <rect x="14" y="5" width="36" height="41" rx="9" fill="#ff2442"/>
         <rect x="21" y="13" width="18" height="13" rx="3.5" fill="#ffffff"/>
@@ -421,7 +570,6 @@
   <!-- 本工具介绍（次级按钮，跳转 new.html） -->
   <a class="cta2" href="new.html">
     <span class="cta2-icon" aria-hidden="true">
-      <!-- 书本/介绍图标 -->
       <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#9db9ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
@@ -439,7 +587,7 @@
     </span>
   </a>
 
-  <!-- 应用截图（请将附件截图保存为 app-screenshot.png，与 index.html 同目录） -->
+  <!-- 应用截图 -->
   <figure class="poster">
     <img src="app-screenshot.png"
          alt="上海地铁新票价对比计算器 计算结果截图"
@@ -463,5 +611,32 @@
   <footer>计算结果仅供参考</footer>
 
 </div>
+
+<script>
+  (function(){
+    var modal  = document.getElementById('rankModal');
+    var notice = document.getElementById('rankNotice');
+    function openModal(){
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(){
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+    notice.addEventListener('click', openModal);
+    notice.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openModal(); }
+    });
+    modal.addEventListener('click', function(e){
+      if(e.target.closest('[data-close]')) closeModal();
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeModal();
+    });
+  })();
+</script>
 </body>
 </html>
