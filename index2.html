@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>上海地铁票价计算器</title>
+<meta name="description" content="上海地铁票价计算器，现行 vs 方案一 vs 方案二，多花多少一目了然。" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root{
+    --bg: #0a1128;
+    --blue: #2b5cff;
+    --orange: #e8842c;
+    --green: #7fd0a0;
+    --red: #ff2442;
+    --text: #f3f6ff;
+  }
+
+  html,body{ height:100%; }
+  body{
+    font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* 背景光晕 */
+  body::before{
+    content:"";
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(700px 340px at 12% -5%, rgba(43,92,255,.20), transparent 60%),
+      radial-gradient(700px 340px at 88% 0%, rgba(232,132,44,.14), transparent 60%),
+      radial-gradient(900px 420px at 50% 108%, rgba(43,92,255,.12), transparent 60%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* 顶部装饰地铁线路 */
+  .lines{
+    position:absolute; top:0; left:0; width:100%; height:230px;
+    pointer-events:none; z-index:0; opacity:.75;
+  }
+
+  .page{
+    position:relative; z-index:1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 56px 20px 60px;
+    text-align:center;
+  }
+
+  /* 词组防折断保护 */
+  .nw{ white-space: nowrap; }
+  /* 仅移动端生效的换行 */
+  .br-m{ display:none; }
+
+  /* ===== 头部 ===== */
+  .badge{
+    display:inline-block;
+    background: linear-gradient(135deg,#1d4ed8,#2b5cff);
+    padding: 8px 22px;
+    border-radius: 999px;
+    font-size: 15px;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 18px rgba(43,92,255,.45);
+  }
+
+  h1{
+    margin: 20px 0 12px;
+    font-weight: 900;
+    line-height: 1.22;
+    letter-spacing: 1px;
+  }
+  h1 span{
+    display:block;
+    background: linear-gradient(180deg,#ffffff 30%,#9db9ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 40px rgba(43,92,255,.30);
+  }
+  h1 .t1{ font-size: clamp(30px, 9.2vw, 64px); }
+  /* 名称变短后，适当放大第二行字号以保持视觉平衡 */
+  h1 .t2{ font-size: clamp(26px, 8.5vw, 62px); white-space: nowrap; }
+
+  .sub{
+    font-size: clamp(14px, 2.6vw, 20px);
+    font-weight: 700;
+    color: #ffd9ad;
+    letter-spacing: 1px;
+    text-wrap: balance;
+  }
+  .chips{ margin-top:18px; display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
+  .chip{
+    padding:6px 18px; border-radius:999px; font-size:14px; font-weight:700;
+    border:1px solid rgba(255,255,255,.25);
+  }
+  .chip-gray{ background:#8a94a8; color:#101a3a; }
+  .chip-blue{ background:var(--blue); color:#fff; }
+  .chip-orange{ background:var(--orange); color:#fff; }
+
+  /* ===== 公告 / 荣誉播报 ===== */
+  .notice{
+    margin: 26px auto 0;
+    max-width: 640px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    background: rgba(43,92,255,.14);
+    border: 1px dashed rgba(125,160,255,.55);
+    border-radius: 16px;
+    padding: 14px 22px;
+    font-size: clamp(14px, 2.2vw, 18px);
+    font-weight: 700;
+    color: #dbe6ff;
+  }
+  .notice-text{
+    flex: 1 1 auto;
+    min-width: 0;
+    line-height: 1.7;
+    text-wrap: balance;
+  }
+  .notice .dot{
+    flex:0 0 auto; width:10px; height:10px; border-radius:50%;
+    background: var(--green);
+    box-shadow: 0 0 0 0 rgba(127,208,160,.7);
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(127,208,160,.7); }
+    70%{ box-shadow:0 0 0 12px rgba(127,208,160,0); }
+    100%{ box-shadow:0 0 0 0 rgba(127,208,160,0); }
+  }
+  /* 高亮：支付宝品牌蓝 */
+  .notice .hl-zfb{
+    color: #4096ff;
+    font-weight: 800;
+    text-shadow: 0 0 14px rgba(22,119,255,.45);
+  }
+  /* 高亮：涌现奖 金牌金 */
+  .notice .hl-rank{
+    color: #ffd166;
+    font-weight: 800;
+    text-shadow: 0 0 14px rgba(255,209,102,.45);
+  }
+
+  /* ===== 工具介绍（提级为主按钮） ===== */
+  .cta-main{
+    margin: 24px auto 0;
+    display:flex; align-items:center; gap:16px;
+    max-width: 560px;
+    padding: 16px 22px;
+    border-radius: 20px;
+    text-decoration:none;
+    color:#fff;
+    background: linear-gradient(135deg,#4f8cff 0%, var(--blue) 55%, #1d4ed8 100%);
+    box-shadow: 0 12px 34px rgba(43,92,255,.38), inset 0 1px 0 rgba(255,255,255,.35);
+    transition: transform .25s ease, box-shadow .25s ease;
+    text-align:left;
+  }
+  .cta-main:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 18px 44px rgba(43,92,255,.5), inset 0 1px 0 rgba(255,255,255,.35);
+  }
+  .cta-main-icon{
+    flex:0 0 auto;
+    width:58px; height:58px; border-radius:50%;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.3);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 4px 14px rgba(0,0,0,.15);
+  }
+  .cta-main-text{ flex:1 1 auto; display:flex; flex-direction:column; gap:4px; min-width: 0; }
+  .cta-main-text strong{ font-size: clamp(16px, 2.8vw, 22px); letter-spacing:1px; }
+  .cta-main-text small{ font-size:13px; opacity:.9; letter-spacing:1px; }
+  .cta-main-arrow{ flex:0 0 auto; display:flex; }
+  .cta-main:hover .cta-main-arrow{ animation: nudge .6s infinite alternate; }
+  @keyframes nudge{ from{ transform:translateX(0);} to{ transform:translateX(5px);} }
+
+  /* ===== 应用截图 ===== */
+  .poster{
+    margin: 28px auto 0;
+    max-width: 480px;
+    border-radius: 26px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.18);
+    box-shadow: 0 20px 60px rgba(0,0,0,.55), 0 0 0 6px rgba(43,92,255,.12);
+    background: #0d1531;
+  }
+  .poster img{
+    display:block; width:100%; height:auto;
+    transition: transform .5s ease;
+  }
+  .poster:hover img{ transform: scale(1.02); }
+  .poster .fallback{
+    padding: 70px 30px;
+    font-size: 22px; font-weight: 800; letter-spacing: 2px;
+    background: linear-gradient(160deg,#101a3a,#0d1531);
+  }
+
+  /* ===== 更新日志 ===== */
+  .changelog{
+    margin: 40px auto 0;
+    max-width: 640px;
+    text-align: left;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    padding: 18px 24px;
+  }
+  .changelog-title{
+    font-size: 14px;
+    font-weight: 700;
+    color: #8fa0c5;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .changelog-title::before{
+    content: "";
+    display: inline-block;
+    width: 4px; height: 14px;
+    background: var(--blue);
+    border-radius: 2px;
+  }
+  .changelog-text{
+    font-size: 13px;
+    line-height: 1.9;
+    color: #95a5c8;
+    letter-spacing: 0.5px;
+  }
+  .changelog-text .num{
+    color: var(--green);
+    font-weight: 800;
+    margin-right: 6px;
+  }
+  .changelog-text .ver{
+    color: #ffb46b;
+    font-weight: 700;
+  }
+  .changelog-history{
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255,255,255,.12);
+    font-size: 12px;
+    line-height: 1.85;
+    color: #7c8db0;
+  }
+  .hist-tag{
+    display: inline-block;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    color: #9fb0d0;
+    border-radius: 6px;
+    padding: 1px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 6px;
+    vertical-align: 1px;
+    white-space: nowrap;
+  }
+
+  footer{
+    margin-top: 34px;
+    font-size: 13px;
+    color:#8fa0c5;
+    letter-spacing: 2px;
+  }
+
+  /* ===== 移动端适配 ===== */
+  @media (max-width: 520px){
+    .page{ padding: 40px 16px 48px; }
+    .lines{ height: 150px; }
+    .br-m{ display:inline; }
+    .badge{ font-size: 13px; padding: 7px 18px; }
+    h1{ letter-spacing: 0; margin: 16px 0 10px; }
+    .sub{ letter-spacing: 0; }
+    .chips{ gap: 8px; margin-top: 14px; }
+    .chip{ padding: 5px 14px; font-size: 13px; }
+    .notice{ padding: 12px 16px; gap: 8px; align-items: flex-start; }
+    .notice .dot{ margin-top: 7px; }
+    .notice-text{ font-size: 14px; }
+    .cta-main{ padding: 14px 16px; gap: 12px; }
+    .cta-main-icon{ width: 48px; height: 48px; }
+    .cta-main-icon svg{ width: 26px; height: 26px; }
+    .cta-main-text{ gap: 3px; }
+    .cta-main-text strong{ font-size: 17px; letter-spacing: 0; }
+    .cta-main-text small{ font-size: 12px; letter-spacing: 0; }
+    .cta-main-arrow svg{ width: 22px; height: 22px; }
+    .poster{ border-radius: 20px; }
+    .changelog{ padding: 16px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部装饰线路 -->
+<svg class="lines" viewBox="0 0 1440 230" preserveAspectRatio="none" aria-hidden="true">
+  <g fill="none" stroke-linecap="round" stroke-width="5">
+    <path d="M-10,50 C220,50 300,130 470,140" stroke="#2b5cff"/>
+    <path d="M-10,95 C240,95 330,170 520,180" stroke="#e8842c"/>
+    <path d="M-10,140 C260,140 360,205 560,215" stroke="#7fd0a0"/>
+    <path d="M1450,50 C1230,50 1150,130 980,140" stroke="#2b5cff"/>
+    <path d="M1450,95 C1210,95 1120,170 930,180" stroke="#e8842c"/>
+    <path d="M1450,140 C1190,140 1090,205 890,215" stroke="#7fd0a0"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="220" cy="50" r="6"/><circle cx="330" cy="98" r="6"/><circle cx="270" cy="140" r="6"/>
+    <circle cx="1220" cy="50" r="6"/><circle cx="1120" cy="98" r="6"/><circle cx="1180" cy="140" r="6"/>
+  </g>
+</svg>
+
+<div class="page">
+
+  <header>
+    <span class="badge">上海地铁 · 智能工具</span>
+    <h1>
+      <span class="t1">上海地铁</span>
+      <span class="t2">票价计算器</span>
+    </h1>
+    <p class="sub">
+      <span class="nw">现行</span> vs <span class="nw">方案一</span> vs <span class="nw">方案二，</span><br class="br-m"><span class="nw">多花多少一目了然</span>
+    </p>
+    <div class="chips">
+      <span class="chip chip-gray">现行</span>
+      <span class="chip chip-blue">方案一</span>
+      <span class="chip chip-orange">方案二</span>
+    </div>
+  </header>
+
+  <!-- 荣誉播报 -->
+  <p class="notice">
+    <span class="dot"></span>
+    <span class="notice-text">🏆 本应用已参加<span class="hl-zfb">支付宝</span>智能体<span class="hl-rank">涌现奖</span>评选</span>
+  </p>
+
+  <!-- 工具介绍主按钮 -->
+  <a class="cta-main" href="new.html">
+    <span class="cta-main-icon" aria-hidden="true">
+      <!-- 书本/指南图标 -->
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <path d="M9 7h7M9 11h7"/>
+      </svg>
+    </span>
+    <span class="cta-main-text">
+      <strong>查看工具介绍与使用说明</strong>
+      <small>功能特色 · 计价口径 · 更新日志</small>
+    </span>
+    <span class="cta-main-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h13M13 6l6 6-6 6"/>
+      </svg>
+    </span>
+  </a>
+
+  <!-- 应用截图 -->
+  <figure class="poster">
+    <img src="app-screenshot.png"
+         alt="上海地铁票价计算器 计算结果截图"
+         onerror="this.style.display='none';this.nextElementSibling.hidden=false;">
+    <div class="fallback" hidden>上海地铁<br>票价计算器</div>
+  </figure>
+
+  <!-- V1.9.9 更新日志 -->
+  <div class="changelog">
+    <h3 class="changelog-title">V1.9.9 更新日志</h3>
+    <p class="changelog-text">
+      <span class="num">①</span> 附件1对照表差异自动高亮：方案一/方案二与现行不同的乘距单元格自动高亮（<span class="ver">方案一=琥珀底橙棕加粗</span>、<span class="ver">方案二=浅绿底绿色加粗</span>，与现行相同不加高亮），差异一眼可辨；<br>
+      <span class="num">②</span> 月度/年度花费对比显示优化：表格与满额三卡增加间距、表头与费用数字字号加大加粗、"基准/费用少"小标签与月度/年度增减文字字号调小、增减信息改两行（月度/年度）防窄屏溢出。
+    </p>
+    <p class="changelog-text changelog-history">
+      <span class="hist-tag">历史更新</span>保存常用、工作日自动计算（含 2026 年国定假调休）、满额/计次票/月度年度自动联动、计次票组合择优、数据分离、百度实测优先、票价按最短路、环线取较短方向、系数校准、涨红跌绿、图表点按交互。
+    </p>
+  </div>
+
+  <footer>计算结果仅供参考</footer>
+
+</div>
+
+</body>
+</html>
